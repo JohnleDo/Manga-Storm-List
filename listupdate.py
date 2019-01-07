@@ -1,6 +1,7 @@
 import os
 import re
 import pandas as pd
+from pandas import ExcelWriter
 from difflib import SequenceMatcher
 from tqdm import tqdm
 from sys import platform
@@ -270,3 +271,9 @@ for x in tqdm(range(len(mangalist))):
 
 os.system(OScommand)
 print(pd.DataFrame(mangalist, columns=['Title', 'Status', 'Current Chapter', 'Host', 'Link', 'File']).to_string())
+df = pd.DataFrame(mangalist, columns=['Title', 'Status', 'Current Chapter', 'Host', 'Link', 'File'])
+
+# Writing the dataframe to .xlsx file
+writer = ExcelWriter('MangaList.xlsx')
+df.to_excel(writer, 'Manga List')
+writer.save()
