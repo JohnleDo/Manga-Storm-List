@@ -216,6 +216,11 @@ for x in tqdm(range(len(mangalist))):
 print("Finding Manga Chapters")
 os.system(OScommand)
 for x in tqdm(range(len(mangalist))):
+    if mangalist[x]['File'] is "No File Found":
+        temp = mangalist[x]
+        temp['Current Chapter'] = "N/A"
+        mangalist[x] = temp
+
     if mangalist[x]['File'] is not "No File Found":
         temp = mangalist[x]
         file = open(mangalist[x]['Host'] + "/" + mangalist[x]['File'])
@@ -262,7 +267,6 @@ for x in tqdm(range(len(mangalist))):
                 continue
         temp['Current Chapter'] = curchapter
         mangalist[x] = temp
-
 
 os.system(OScommand)
 print(pd.DataFrame(mangalist, columns=['Title', 'Status', 'Current Chapter', 'Host', 'Link', 'File']).to_string())
