@@ -1,7 +1,10 @@
 import os
 import re
+import numpy as np
 from pprint import pprint
 import pandas as pd
+from difflib import SequenceMatcher
+from tqdm import tqdm
 
 """
 R - Reading
@@ -10,6 +13,7 @@ A - Archived
 N - Not Reading
 """
 newline_tabregex = r'\t|\n'
+matchfilterregex = r'(\s|:|/|\?)*'
 Linkregex = r'http(s)*://([A-Z]|[a-z]|[0-9]|\s|(\.)|/|-|_)*'
 Rstatusregex = r'\tR\t[0-9]+.[0-9]+'
 Ystatusregex = r'\tY\t[0-9]+.[0-9]+'
@@ -27,89 +31,101 @@ readmangatodayregex = r'z10readmangatoday'
 mangakoiregex = r'z12mangakoi'
 mangaedenregex = r'z01mangaeden'
 mangafoxmbregex = r'mangafoxmb'
-mangainfo = {'Title': "", 'Current Chapter': "", 'Status': "", 'Host': "", 'Link': ""}
+mangainfo = {'Title': "", 'Current Chapter': "", 'Status': "", 'Host': "", 'Link': "", 'File': ""}
 mangalist = []
+mangafiles = []
 lines2 = []
 
 os.chdir('..')
 os.chdir("Manga Storm/Container/Documents/UserData/")
+top = os.getcwd()
 
 file = open("favorites2.dat", "r")
 lines = file.readlines()
+file.close()
+
+
+# Grabbing all .dat files in directory and subdirectory
+for root, dirs, files in os.walk(top):
+    for file in files:
+        if file.endswith(".dat"):
+            mangafiles.append(file)
+
 
 # Reading through each line and parsing each line for mangatype and cutting it out and storing it
 for x in range(len(lines)):
     r = re.search(mangadexregex, lines[x])
     if r is not None:
-        mangainfo['Host'] = "mangadex"
+        mangainfo['Host'] = mangadexregex
         mangalist.append(mangainfo.copy())
         lines2.append(re.sub(mangadexregex, '', lines[x]))
 
     r = re.search(mangahereregex, lines[x])
     if r is not None:
-        mangainfo['Host'] = "mangahere"
+        mangainfo['Host'] = mangahereregex
         mangalist.append(mangainfo.copy())
         lines2.append(re.sub(mangahereregex, '', lines[x]))
 
     r = re.search(mangatownregex, lines[x])
     if r is not None:
-        mangainfo['Host'] = "mangatown"
+        mangainfo['Host'] = mangatownregex
         mangalist.append(mangainfo.copy())
         lines2.append(re.sub(mangatownregex, '', lines[x]))
 
     r = re.search(mangafoxregex, lines[x])
     if r is not None:
-        mangainfo['Host'] = "mangafox"
+        mangainfo['Host'] = mangafoxregex
         mangalist.append(mangainfo.copy())
         lines2.append(re.sub(mangafoxregex, '', lines[x]))
 
     r = re.search(mangareaderregex, lines[x])
     if r is not None:
-        mangainfo['Host'] = "mangareader"
+        mangainfo['Host'] = mangareaderregex
         mangalist.append(mangainfo.copy())
         lines2.append(re.sub(mangareaderregex, '', lines[x]))
 
     r = re.search(mangahomeregex, lines[x])
     if r is not None:
-        mangainfo['Host'] = "mangahome"
+        mangainfo['Host'] = mangahomeregex
         mangalist.append(mangainfo.copy())
         lines2.append(re.sub(mangahomeregex, '', lines[x]))
 
     r = re.search(mangapandaregex, lines[x])
     if r is not None:
-        mangainfo['Host'] = "mangapanda"
+        mangainfo['Host'] = mangapandaregex
         mangalist.append(mangainfo.copy())
         lines2.append(re.sub(mangapandaregex, '', lines[x]))
 
     r = re.search(kissmangaregex, lines[x])
     if r is not None:
-        mangainfo['Host'] = "kissmanga"
+        mangainfo['Host'] = kissmangaregex
         mangalist.append(mangainfo.copy())
         lines2.append(re.sub(kissmangaregex, '', lines[x]))
 
     r = re.search(readmangatodayregex, lines[x])
     if r is not None:
-        mangainfo['Host'] = "readmangatoday"
+        mangainfo['Host'] = readmangatodayregex
         mangalist.append(mangainfo.copy())
         lines2.append(re.sub(readmangatodayregex, '', lines[x]))
 
     r = re.search(mangakoiregex, lines[x])
     if r is not None:
-        mangainfo['Host'] = "mangakoi"
+        mangainfo['Host'] = mangakoiregex
         mangalist.append(mangainfo.copy())
         lines2.append(re.sub(mangakoiregex, '', lines[x]))
 
     r = re.search(mangaedenregex, lines[x])
     if r is not None:
-        mangainfo['Host'] = "mangaeden"
+        mangainfo['Host'] = mangaedenregex
         mangalist.append(mangainfo.copy())
         lines2.append(re.sub(mangaedenregex, '', lines[x]))
 
     r = re.search(mangafoxmbregex, lines[x])
     if r is not None:
-        mangainfo['Host'] = "mangafoxmb"
+        mangainfo['Host'] = mangafoxmbregex
         mangalist.append(mangainfo.copy())
         lines2.append(re.sub(mangafoxmbregex, '', lines[x]))
+
 
 # Reading through each line and parsing each line for manga status and cutting it out and storing it
 del lines[:]
@@ -142,15 +158,17 @@ for x in range(len(lines2)):
         mangalist[x] = temp
         lines.append(re.sub(Nstatusregex, '', lines2[x]))
 
+
 # Reading through each line and parsing each line for website link and cutting it out and storing it
 del lines2[:]
 for x in range(len(lines)):
     r = re.search(Linkregex, lines[x])
     if r is not None:
         temp = mangalist[x]
-        temp['Link'] = re.search(Linkregex, lines[x]).group()
+        temp['Link'] = re.sub(newline_tabregex, '', re.search(Linkregex, lines[x]).group())
         mangalist[x] = temp
         lines2.append(re.sub(Linkregex, '', lines[x]))
+
 
 # Reading through each line while removing newlines and tabs
 del lines[:]
@@ -159,5 +177,84 @@ for x in range(len(lines2)):
     temp['Title'] = re.sub(newline_tabregex, '', lines2[x])
     mangalist[x] = temp
 
-print(os.getcwd())
-print(pd.DataFrame(mangalist, columns=['Title', 'Status', 'Current Chapter', 'Host', 'Link']).to_string())
+
+# Finding all .dat files for manga information and storing the file name
+del lines[:]
+del lines2[:]
+resultchecker = 0
+no_results = []
+results = []
+print("Finding Manga Files")
+for x in tqdm(range(len(mangalist))):
+    temp = mangalist[x]
+    for y in range(len(mangafiles)):
+        listname = re.sub(matchfilterregex, '', (mangalist[x]['Host'] + "_" + mangalist[x]['Title'] + "_info.dat"))
+        filename = re.sub(matchfilterregex, '', mangafiles[y])
+        matcher = SequenceMatcher(None, listname, filename)
+        if matcher.ratio() == 1:
+            temp['File'] = mangafiles[y]
+            mangalist[x] = temp
+            resultchecker = 0
+            break
+        else:
+            resultchecker = 1
+            continue
+    if resultchecker == 1:
+        temp['File'] = "No File Found"
+        mangalist[x] = temp
+
+
+# Goes through each manga .dat file that was found and runs multiple regexes to find the highest finished chapter
+print("Finding Manga Chapters")
+os.system('clear')
+for x in tqdm(range(len(mangalist))):
+    if mangalist[x]['File'] is not "No File Found":
+        temp = mangalist[x]
+        file = open(mangalist[x]['Host'] + "/" + mangalist[x]['File'])
+        lines = file.readlines()
+        file.close()
+
+        """
+        These regular expressions are for filtering the different types of formats for different manga series
+        1. Is for filtering out the ID found in each file
+        2. Is for filtering series that has chapters labeled with VOL number. Example: VOL5 34
+        3. Is for filtering series where there are duplicate chapters which uses a -2 in the chapter name. Example: 44-2
+        4. Is for filtering series where there are duplicate chapters which uses the title in the chapter name with the chapter number. Example: Ao-12
+        5. Is for filtering series where there are duplicate chapters which uses the title in the chapter name but for the first chapter doesn't
+            use the chapter number. Which is replaced with a value of 0. Example: Ao
+        6. Is for filtering series where after running the other regexes can result in a string of 0.0.- which is replaced by a zero value.
+        7. Is for filtering series where after running the other regexes can result in a string of 0.0. which is replaced by a zero value.
+        """
+        tempchap = re.sub(r'[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\.[0-9][0-9][0-9][0-9][0-9][0-9]', '', lines[2])
+        tempchap = re.sub(r'(([A-Z]|[a-z])+[0-9]+)\s', '', tempchap)
+        tempchap = re.sub(r'[0-9]+-[0-9]+', '0', tempchap)
+        tempchap = re.sub(r'([A-Z]|[a-z])+-', '', tempchap)
+        tempchap = re.sub(r'([A-Z]|[a-z])+', '0', tempchap)
+        tempchap = re.sub(r'0\.0\.-', '0', tempchap)
+        tempchap = re.sub(r'0\.0\.', '0', tempchap)
+        tempchap = tempchap.replace(' ', '')
+
+        curchapter = float(re.search(r'(([0-9]+|\.)*)', tempchap).group(1))
+
+        # We start at index 3 so we can skip the first 3 lines in the .dat file which only gives information about the manga and not the chapters we need.
+        for y in range(3, len(lines)):
+            tempchap = re.sub(r'[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\.[0-9][0-9][0-9][0-9][0-9][0-9]', '', lines[y])
+            tempchap = re.sub(r'(([A-Z]|[a-z])+[0-9]+)\s', '', tempchap)
+            tempchap = re.sub(r'[0-9]+-[0-9]+', '0', tempchap)
+            tempchap = re.sub(r'([A-Z]|[a-z])+-', '', tempchap)
+            tempchap = re.sub(r'([A-Z]|[a-z])+', '0', tempchap)
+            tempchap = re.sub(r'0\.0\.-', '0', tempchap)
+            tempchap = re.sub(r'0\.0\.', '0', tempchap)
+            tempchap = tempchap.replace(' ', '')
+
+            if curchapter < float(re.search(r'(([0-9]+|\.)*)', tempchap).group(1)):
+                curchapter = float(re.search(r'(([0-9]+|\.)*)', tempchap).group(1))
+
+            else:
+                continue
+        temp['Current Chapter'] = curchapter
+        mangalist[x] = temp
+
+
+os.system('clear')
+print(pd.DataFrame(mangalist, columns=['Title', 'Status', 'Current Chapter', 'Host', 'Link', 'File']).to_string())
