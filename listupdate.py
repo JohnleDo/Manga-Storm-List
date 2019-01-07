@@ -1,7 +1,5 @@
 import os
 import re
-import numpy as np
-from pprint import pprint
 import pandas as pd
 from difflib import SequenceMatcher
 from tqdm import tqdm
