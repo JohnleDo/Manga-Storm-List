@@ -3,6 +3,7 @@ import re
 import pandas as pd
 from difflib import SequenceMatcher
 from tqdm import tqdm
+from sys import platform
 
 """
 R - Reading
@@ -33,6 +34,15 @@ mangainfo = {'Title': "", 'Current Chapter': "", 'Status': "", 'Host': "", 'Link
 mangalist = []
 mangafiles = []
 lines2 = []
+
+if platform == "linux" or platform == "linux2":
+    OScommand = 'clear'
+
+elif platform == "win32" or platform == "win64":
+    OScommand = 'cls'
+
+else:
+    print("Could Not Detect Operating System")
 
 os.chdir('..')
 os.chdir("Manga Storm/Container/Documents/UserData/")
@@ -204,7 +214,7 @@ for x in tqdm(range(len(mangalist))):
 
 # Goes through each manga .dat file that was found and runs multiple regexes to find the highest finished chapter
 print("Finding Manga Chapters")
-os.system('clear')
+os.system(OScommand)
 for x in tqdm(range(len(mangalist))):
     if mangalist[x]['File'] is not "No File Found":
         temp = mangalist[x]
@@ -254,5 +264,5 @@ for x in tqdm(range(len(mangalist))):
         mangalist[x] = temp
 
 
-os.system('clear')
+os.system(OScommand)
 print(pd.DataFrame(mangalist, columns=['Title', 'Status', 'Current Chapter', 'Host', 'Link', 'File']).to_string())
