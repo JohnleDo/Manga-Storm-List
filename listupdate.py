@@ -276,7 +276,7 @@ def get_mangachapters():
 def save_excel(dataframe, excelName):
     # Check if our mangalist shell exists
     if os.path.exists(excelName.replace(" ", "") + "_Shell" + ".xlsx") is True:
-        df_shell = pd.read_excel(excelName.replace(" ", "") + "_Shell" + ".xlsx", sheet_name='Shell')
+        df_shell = pd.read_excel(excelName.replace(" ", "") + "_Shell" + ".xlsx", sheet_name=excelName)
 
         # Updating our dataframe with our existing shell file
         dataframe.update(df_shell)
@@ -330,5 +330,6 @@ if __name__ == "__main__":
     clear_screen()
 
     df = pd.DataFrame(mangalist, columns=['ENG Title', 'JPN Title', 'Status', 'Current Chapter', 'Host', 'Manga Link', 'Kitsu Link', 'File'])
+    df = save_excel(df, "Manga List")
 
-    print(save_excel(df, "Manga List"))
+    print(df)
