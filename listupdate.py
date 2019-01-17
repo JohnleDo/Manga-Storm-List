@@ -1,11 +1,11 @@
 import os
 import re
 import pandas as pd
-import numpy as np
 from pandas import ExcelWriter
 from difflib import SequenceMatcher
 from tqdm import tqdm
 from sys import platform
+from multiprocessing import Pool, Manager
 
 """
 Note: Currently works best on a Linux OS than Windows OS because on Windows it cannot read unicode characters well which results in the .dat file not
@@ -14,6 +14,11 @@ R - Reading
 Y - Completed
 A - Archived
 N - Not Reading
+
+------------------
+TO DO
+------------------
+1.
 """
 newline_tabregex = r'\t|\n'
 matchfilterregex = r'(\s|:|/|\?)*'
@@ -38,6 +43,9 @@ mangainfo = {'ENG Title': "", 'JPN Title:': "", 'Current Chapter': "", 'Status':
 mangalist = []
 mangafiles = []
 lines2 = []
+resultchecker = 0
+manager = Manager()
+shared_list = manager.list()
 
 
 # Function for clearing the screen
@@ -191,27 +199,42 @@ def get_mangafiles():
             if file.endswith(".dat"):
                 mangafiles.append(file)
 
-    del lines[:]
-    del lines2[:]
-    resultchecker = 0
     print("Finding Manga Files")
-    for x in tqdm(range(len(mangalist))):
-        temp = mangalist[x]
-        for y in range(len(mangafiles)):
-            listname = re.sub(matchfilterregex, '', (mangalist[x]['Host'] + "_" + mangalist[x]['ENG Title'] + "_info.dat"))
-            filename = re.sub(matchfilterregex, '', mangafiles[y])
-            matcher = SequenceMatcher(None, listname, filename)
-            if matcher.ratio() == 1:
-                temp['File'] = mangafiles[y]
-                mangalist[x] = temp
-                resultchecker = 0
-                break
-            else:
-                resultchecker = 1
-                continue
-        if resultchecker == 1:
-            temp['File'] = "No File Found"
-            mangalist[x] = temp
+
+    # Creating an empty list to use to iterate for multiprocessing and creating a pool of workers
+    iteration = list(range(0, len(mangalist)))
+    pool = Pool()
+    for x in tqdm(pool.imap(get_outer, iteration), total=len(iteration)):
+        pass
+    pool.close()
+    pool.join()
+
+    # Multiprocessing does not share the global variables among the child processes so we store it in a shared variable and then put the new information
+    # back to our mangalist.
+    for x in range(len(shared_list)):
+        mangalist[x] = shared_list[x]
+
+
+# This is a basically the loop that would be found within a nested loop but was changed to multiprocessing could be implemented.
+def get_outer(xy):
+    # When using multiprocessing, the imap function passes a function and a list. This case xy is the list that we passed in to use as our iteration
+    x = xy
+    temp = mangalist[x]
+    for y in range(len(mangafiles)):
+        listname = re.sub(matchfilterregex, '', (mangalist[x]['Host'] + "_" + mangalist[x]['ENG Title'] + "_info.dat"))
+        filename = re.sub(matchfilterregex, '', mangafiles[y])
+        matcher = SequenceMatcher(None, listname, filename)
+        if matcher.ratio() == 1:
+            temp['File'] = mangafiles[y]
+            shared_list.append(temp)
+            resultchecker = 0
+            break
+        else:
+            resultchecker = 1
+            continue
+    if resultchecker == 1:
+        temp['File'] = "No File Found"
+        shared_list.append(temp)
 
 
 # Goes through each manga .dat file that was found and runs multiple regexes to find the highest finished chapter
@@ -279,12 +302,17 @@ def save_excel(dataframe, excelName):
         df_shell = pd.read_excel(excelName.replace(" ", "") + "_Shell" + ".xlsx", sheet_name=excelName)
 
         # Updating our dataframe with our existing shell file
-        dataframe.update(df_shell)
+        dataframe = pd.merge(dataframe, df_shell, how='outer', on=['ENG Title']).drop(['JPN Title_x', 'Kitsu Link_x'], axis=1)
+        dataframe = dataframe[['ENG Title', 'JPN Title_y', 'Status', 'Current Chapter', 'Host', 'Manga Link', 'Kitsu Link_y', 'File']]
+        dataframe = dataframe.rename(index=str, columns={"JPN Title_y": "JPN Title", "Kitsu Link_y": "Kitsu Link"})
+        dataframe = dataframe.drop_duplicates(subset=['ENG Title', 'JPN Title', 'Status', 'Current Chapter', 'Host', 'Manga Link', 'Kitsu Link', 'File'], keep='first')
         dataframe['Status'] = pd.Categorical(dataframe['Status'], ["R", "Y", "A"])
-        dataframe = dataframe.sort_values(['Status', 'ENG Title'])
-        dataframe = dataframe.reset_index(drop=True)
+        dataframe['Test'] = dataframe['ENG Title'].str.lower()
+        dataframe = dataframe.sort_values(['Status', 'Test'])
+        dataframe.drop('Test', axis=1, inplace=True)
+        dataframe.reset_index(drop=True, inplace=True)
 
-        # Now writing to our dataframe to .xlsx file after updating it with the shell file
+        # Now writing to our dataframe to .xlsx file after updating it with the shell file[]
         writer = ExcelWriter(excelName.replace(" ", "") + ".xlsx")
         dataframe.to_excel(writer, excelName)
         writer.save()
