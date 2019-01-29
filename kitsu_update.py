@@ -1,12 +1,31 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
+from multiprocessing import Manager, Pool, cpu_count, Queue
 import pandas as pd
-import requests
 import time
 import json
+from tqdm import tqdm
+
+"""
+------------------
+TO DO
+------------------
+1. Organize the code better by adding functions.
+2. Implement multiprocessing/multithreading for selenium so it can update the kitsu website quicker.
+3. Figure out how to check if a website exist because for some reason using the existing methods to check if a kitsu website exist returns a 403 error
+whether they exist or not. An idea is to simply do the method to creating website links, store it into a list or something; run the website updater. When
+the website it loaded it will check for a header element with the text 404. If it doesn't exist then website exist and the website will be added to the
+.xlsx file.
+"""
+mangalist = pd.read_excel("/home/johnledo/repos/Manga Storm/Container/Documents/UserData/MangaList.xlsx")
+manager = Manager()
+# shared_list = manager.list()
+# shared_queue = manager.Queue()
 
 
-def login(driver):
+def login(xy):
+    driver = webdriver.Chrome(executable_path='/home/johnledo/repos/Manga-Storm-List/drivers/chromedriver')
+
     # Opens our .json file containing the login info for the ktsu website
     with open("/home/johnledo/repos/login.json") as json_data:
         logininfo = json.load(json_data)
@@ -41,8 +60,24 @@ def login(driver):
 
 
 if __name__ == "__main__":
-    # Opens our excel file containing the manga list information
-    mangalist = pd.read_excel("/home/johnledo/repos/Manga Storm/Container/Documents/UserData/MangaList.xlsx")
+    """
+    for x in range(800):
+        shared_queue.put(int(x))
+
+    print(shared_queue.get())
+    """
+    cores = cpu_count()
+    print("Number of Cores:", cores)
+    iteration = list(range(0, cores))
+    pool = Pool()
+    """
+    for x in tqdm(pool.imap(login, iteration), total=len(iteration)):
+        pass
+    pool.close()
+    pool.join()
+    """
+
+    """
     for x in range(0, 6):
         print(mangalist.loc[x]['ENG Title'])
     try:
@@ -51,7 +86,7 @@ if __name__ == "__main__":
             print("Webpage exists")
     except TypeError:
         print("Webpage does not exist")
-
+"""
 """
     for x in range(len(mangalist)):
         temp = mangalist.loc[x]

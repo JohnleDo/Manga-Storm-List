@@ -18,7 +18,7 @@ N - Not Reading
 ------------------
 TO DO
 ------------------
-1.
+1. Get rid of JPN Title and change back ENG Title back to just Title. Don't think JPN Title will be necessary after some rethinking.
 """
 newline_tabregex = r'\t|\n'
 matchfilterregex = r'(\s|:|/|\?)*'
@@ -297,12 +297,15 @@ def get_mangachapters():
 
 # Writing the dataframe to .xlsx file
 def save_excel(dataframe, excelName):
-    # Check if our mangalist shell exists
-    if os.path.exists(excelName.replace(" ", "") + "_Shell" + ".xlsx") is True:
-        df_shell = pd.read_excel(excelName.replace(" ", "") + "_Shell" + ".xlsx", sheet_name=excelName)
+    # Check if our mangalist already exists
+    # If it does exist we will extract some information from it and merging it with out new MangaList
+    if os.path.exists(excelName.replace(" ", "") + ".xlsx") is True:
+        # Reading preexisting MangaList file and extracting specific information from it
+        df_temp = pd.read_excel(excelName.replace(" ", "") + ".xlsx", sheet_name=excelName)
+        df_extract = df_temp[['ENG Title', 'JPN Title', 'Kitsu Link']].copy()
 
         # Updating our dataframe with our existing shell file
-        dataframe = pd.merge(dataframe, df_shell, how='outer', on=['ENG Title']).drop(['JPN Title_x', 'Kitsu Link_x'], axis=1)
+        dataframe = pd.merge(dataframe, df_extract, how='outer', on=['ENG Title']).drop(['JPN Title_x', 'Kitsu Link_x'], axis=1)
         dataframe = dataframe[['ENG Title', 'JPN Title_y', 'Status', 'Current Chapter', 'Host', 'Manga Link', 'Kitsu Link_y', 'File']]
         dataframe = dataframe.rename(index=str, columns={"JPN Title_y": "JPN Title", "Kitsu Link_y": "Kitsu Link"})
         dataframe = dataframe.drop_duplicates(subset=['ENG Title', 'JPN Title', 'Status', 'Current Chapter', 'Host', 'Manga Link', 'Kitsu Link', 'File'], keep='first')
@@ -312,25 +315,12 @@ def save_excel(dataframe, excelName):
         dataframe.drop('Test', axis=1, inplace=True)
         dataframe.reset_index(drop=True, inplace=True)
 
-        # Now writing to our dataframe to .xlsx file after updating it with the shell file[]
+        # Now writing to our dataframe to .xlsx file after updating it with the shell file
         writer = ExcelWriter(excelName.replace(" ", "") + ".xlsx")
         dataframe.to_excel(writer, excelName)
         writer.save()
 
-        # Now rewriting to our shell file by extracting those columns again but we do this in case of new manga has been added so we
-        # can have that in our shell
-        df_shell = dataframe[['ENG Title', 'JPN Title', 'Kitsu Link']].copy()
-        writer = ExcelWriter(excelName.replace(" ", "") + "_Shell" + ".xlsx")
-        df_shell.to_excel(writer, excelName)
-        writer.save()
-
     else:
-        # Since it did not exist we will create one
-        df_shell = dataframe[['ENG Title', 'JPN Title', 'Kitsu Link']].copy()
-        writer = ExcelWriter(excelName.replace(" ", "") + "_Shell" + ".xlsx")
-        df_shell.to_excel(writer, excelName)
-        writer.save()
-
         # Now writing to our dataframe to .xlsx file
         writer = ExcelWriter(excelName.replace(" ", "") + ".xlsx")
         dataframe.to_excel(writer, excelName)
