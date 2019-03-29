@@ -16,6 +16,8 @@ TO DO
 whether they exist or not. An idea is to simply do the method to creating website links, store it into a list or something; run the website updater. When
 the website it loaded it will check for a header element with the text 404. If it doesn't exist then website exist and the website will be added to the
 .xlsx file.
+4. The issue from issue 3 is probably due to that the website uses an apiary.io blueprint so probably should learn how to use that in this code for better
+effecicent.
 """
 mangalist = pd.read_excel("/home/johnledo/repos/Manga Storm/Container/Documents/UserData/MangaList.xlsx")
 manager = Manager()
