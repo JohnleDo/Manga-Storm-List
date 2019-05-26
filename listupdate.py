@@ -5,11 +5,11 @@ from pandas import ExcelWriter
 from difflib import SequenceMatcher
 from tqdm import tqdm
 from sys import platform
-from multiprocessing import Pool, Manager
+from multiprocessing import Pool, Manager, freeze_support
 
 """
-Note: Currently works best on a Linux OS than Windows OS because on Windows it cannot read unicode characters well which results in the .dat file not
-      being found.
+Note: Currently works best on a Linux OS due to having multiprocessing capabilities. Windows is not able to do multiprocessing due to it
+      not forking correctly (I think). In the meantime, use substitue script for Windows.
 R - Reading
 Y - Completed
 A - Archived
@@ -22,7 +22,7 @@ TO DO
 """
 newline_tabregex = r'\t|\n'
 matchfilterregex = r'(\s|:|/|\?)*'
-Linkregex = r'http(s)*://([A-Z]|[a-z]|[0-9]|\s|(\.)|/|-|_)*'
+Linkregex = r'http(s)*://([A-Z]|[a-z]|[0-9]|\s|(\.)|/|-|_|\?|=)*'
 Rstatusregex = r'\tR\t[0-9]+.[0-9]+'
 Ystatusregex = r'\tY\t[0-9]+.[0-9]+'
 Astatusregex = r'\tA\t[0-9]+.[0-9]+'
@@ -249,7 +249,7 @@ def get_mangachapters():
 
         if mangalist[x]['File'] != "No File Found":
             temp = mangalist[x]
-            file = open(mangalist[x]['Host'] + "/" + mangalist[x]['File'])
+            file = open(mangalist[x]['Host'] + "/" + mangalist[x]['File'], encoding="UTF-8")
             lines = file.readlines()
             file.close()
 
@@ -316,25 +316,26 @@ def save_excel(dataframe, excelName):
         dataframe.reset_index(drop=True, inplace=True)
 
         # Now writing to our dataframe to .xlsx file after updating it with the shell file
-        writer = ExcelWriter(excelName.replace(" ", "") + ".xlsx")
-        dataframe.to_excel(writer, excelName)
+        writer = ExcelWriter(excelName.replace(" ", "") + ".xlsx", encoding="UTF-8")
+        dataframe.to_excel(writer, excelName, encoding="UTF-8")
         writer.save()
 
     else:
         # Now writing to our dataframe to .xlsx file
-        writer = ExcelWriter(excelName.replace(" ", "") + ".xlsx")
-        dataframe.to_excel(writer, excelName)
+        writer = ExcelWriter(excelName.replace(" ", "") + ".xlsx", encoding="UTF-8")
+        dataframe.to_excel(writer, excelName, encoding="UTF-8")
         writer.save()
 
     return dataframe
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
+    freeze_support()
     os.chdir('..')
     os.chdir("Manga Storm/Container/Documents/UserData/")
     top = os.getcwd()
 
-    file = open("favorites2.dat", "r")
+    file = open("favorites.dat", "r", encoding="UTF-8")
     lines = file.readlines()
     file.close()
 
@@ -348,6 +349,6 @@ if __name__ == "__main__":
     clear_screen()
 
     df = pd.DataFrame(mangalist, columns=['ENG Title', 'JPN Title', 'Status', 'Current Chapter', 'Host', 'Manga Link', 'Kitsu Link', 'File'])
-    df = save_excel(df, "Manga List")
+    df = save_excel(df, "Manga List", encoding="UTF-8")
 
     print(df)
