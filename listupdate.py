@@ -22,7 +22,7 @@ TO DO
 """
 newline_tabregex = r'\t|\n'
 matchfilterregex = r'(\s|:|/|\?)*'
-Linkregex = r'http(s)*://([A-Z]|[a-z]|[0-9]|\s|(\.)|/|-|_|\?|=)*'
+Linkregex = r'http(s)*://([A-Z]|[a-z]|[0-9]|\s|(\.)|/|-|_|\?|=|&)*'
 Rstatusregex = r'\tR\t[0-9]+.[0-9]+'
 Ystatusregex = r'\tY\t[0-9]+.[0-9]+'
 Astatusregex = r'\tA\t[0-9]+.[0-9]+'
@@ -50,7 +50,7 @@ shared_list = manager.list()
 
 # Function for clearing the screen
 def clear_screen():
-    if platform == "linux" or platform == "linux2":
+    if platform == "linux" or platform == "linux2" or platform == "darwin":
         OScommand = 'clear'
 
     elif platform == "win32" or platform == "win64":
@@ -284,6 +284,7 @@ def get_mangachapters():
                 tempchap = re.sub(r'([A-Z]|[a-z])+', '0', tempchap)
                 tempchap = re.sub(r'0\.0\.-', '0', tempchap)
                 tempchap = re.sub(r'0\.0\.', '0', tempchap)
+                tempchap = re.sub(r'_', '0', tempchap)
                 tempchap = tempchap.replace(' ', '')
 
                 if curchapter < float(re.search(r'(([0-9]+|\.)*)', tempchap).group(1)):
@@ -349,6 +350,6 @@ if __name__ == '__main__':
     clear_screen()
 
     df = pd.DataFrame(mangalist, columns=['ENG Title', 'JPN Title', 'Status', 'Current Chapter', 'Host', 'Manga Link', 'Kitsu Link', 'File'])
-    df = save_excel(df, "Manga List", encoding="UTF-8")
+    df = save_excel(df, "Manga List")
 
     print(df)

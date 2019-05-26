@@ -14,7 +14,7 @@ N - Not Reading
 """
 newline_tabregex = r'\t|\n'
 matchfilterregex = r'(\s|:|/|\?)*'
-Linkregex = r'http(s)*://([A-Z]|[a-z]|[0-9]|\s|(\.)|/|-|_|\?|=)*'
+Linkregex = r'http(s)*://([A-Z]|[a-z]|[0-9]|\s|(\.)|/|-|_|\?|=|&)*'
 Rstatusregex = r'\tR\t[0-9]+.[0-9]+'
 Ystatusregex = r'\tY\t[0-9]+.[0-9]+'
 Astatusregex = r'\tA\t[0-9]+.[0-9]+'
