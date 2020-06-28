@@ -1,0 +1,707 @@
+{
+  "version": "13",
+  "engineVersion": 1,
+  "providerID": "mangafoxmb",
+  "hostName": "m.fanfox.net",
+  "maxConcurrentCheckingNewChaptersOperation": 2,
+  "delayBetweenCheckingNewChaptersOperation": 0,
+  "maxConcurrentLoadingPagesOperation": 1,
+  "mangaInfoParser": [
+    {
+      "id": "$mangaID",
+      "sourceElement": "content",
+      "actions": [
+        {
+          "action": "findRegexAndJump",
+          "regex": "property=\"og:title\" content=\".*? Manga\"",
+          "actionIDIfNotFound": "mobileMode"
+        },
+        {
+          "action": "substringWithRegex",
+          "regex": "property=\"og:title\" content=\".*? Manga\""
+        },
+        {
+          "action": "substringWithModifiedRange",
+          "location": 29,
+          "length": -36
+        },
+        {
+          "action": "jump",
+          "actionID": "end"
+        },
+        {
+          "id": "mobileMode",
+          "action": "substringWithRegex",
+          "regex": "<p class=\"title\">.*?</p>"
+        },
+        {
+          "action": "substringWithModifiedRange",
+          "location": 17,
+          "length": -21
+        },
+        {
+          "id": "end"
+        }
+      ]
+    },
+    {
+      "id": "$mangaTitle",
+      "sourceElement": "$mangaID"
+    },
+    {
+      "id": "$mangaAuthor",
+      "sourceElement": "content",
+      "actions": [
+        {
+          "action": "substringWithRegex",
+          "regex": "/search/author/.*?</a>"
+        },
+        {
+          "action": "substringWithRegex",
+          "regex": ">.*?<"
+        },
+        {
+          "action": "substringWithModifiedRange",
+          "location": 1,
+          "length": -2
+        }
+      ]
+    },
+    {
+      "id": "$mangaStatus",
+      "sourceElement": "content",
+      "actions": [
+        {
+          "action": "findRegexAndJump",
+          "regex": "(?s)<h5>Status:</h5>.*?</span>",
+          "actionIDIfNotFound": "mobileMode"
+        },
+        {
+          "action": "substringWithRegex",
+          "regex": "(?s)<h5>Status:</h5>.*?</span>"
+        },
+        {
+          "action": "jump",
+          "actionID": "findCompleted"
+        },
+        {
+          "id": "mobileMode",
+          "action": "substringWithRegex",
+          "regex": "<p>Status:.*?</p>"
+        },
+        {
+          "id": "findCompleted",
+          "action": "findStringAndSetValue",
+          "string": "Completed",
+          "caseInsensitive": true,
+          "valueIfFound": "C",
+          "valueIfNotFound": "O"
+        }
+      ]
+    },
+    {
+      "id": "$mangaDescription",
+      "sourceElement": "content",
+      "actions": [
+        {
+          "action": "findRegexAndJump",
+          "regex": "(?s)<p class=\"summary\">.*?</p>",
+          "actionIDIfNotFound": "mobileMode"
+        },
+        {
+          "action": "substringWithRegex",
+          "regex": "(?s)<p class=\"summary\">.*?</p>"
+        },
+        {
+          "action": "substringWithModifiedRange",
+          "location": 19,
+          "length": -23
+        },
+        {
+          "action": "jump",
+          "actionID": "end"
+        },
+        {
+          "id": "mobileMode",
+          "action": "substringWithRegex",
+          "regex": "(?s)<div class=\"manga-summary\">.*?</div>"
+        },
+        {
+          "action": "substringWithModifiedRange",
+          "location": 27,
+          "length": -33
+        },
+        {
+          "id": "end"
+        }
+      ]
+    },
+    {
+      "id": "$mangaPreviewImageUrlPath",
+      "sourceElement": "content",
+      "actions": [
+        {
+          "action": "substringWithRegex",
+          "regex": "src=\".*?cover.jpg.*?\""
+        },
+        {
+          "action": "substringWithModifiedRange",
+          "location": 5,
+          "length": -6
+        }
+      ]
+    },
+    {
+      "id": "$chapters",
+      "sourceElement": "content",
+      "actions": [
+        {
+          "action": "findRegexAndJump",
+          "regex": "(?s)<h3 class=\"volume\">.*?</ul>",
+          "actionIDIfNotFound": "mobileMode"
+        },
+        {
+          "action": "componentsMatchedByRegex",
+          "regex": "(?s)<h3 class=\"volume\">.*?</ul>"
+        },
+        {
+          "action": "reverseArray"
+        },
+        {
+          "action": "transformSimpleArrayItemToComplex",
+          "elements": [
+            {
+              "id": "volumeNo",
+              "sourceElement": "itemContent",
+              "actions": [
+                {
+                  "action": "substringWithRegex",
+                  "regex": ">Volume .*?<span>"
+                },
+                {
+                  "action": "substringWithModifiedRange",
+                  "location": 8,
+                  "length": -14
+                }
+              ]
+            },
+            {
+              "id": "volumeChapters",
+              "sourceElement": "itemContent",
+              "actions": [
+                {
+                  "action": "componentsMatchedByRegex",
+                  "regex": "(?s)<li>.*?</li>"
+                },
+                {
+                  "action": "reverseArray"
+                },
+                {
+                  "action": "transformSimpleArrayItemToComplex",
+                  "elements": [
+                    {
+                      "id": "chapterAhref",
+                      "sourceElement": "itemContent",
+                      "actions": [
+                        {
+                          "action": "componentsMatchedByRegex",
+                          "regex": "<a .*?</a>"
+                        },
+                        {
+                          "action": "getObjectAtIndex",
+                          "index": 1
+                        }
+                      ]
+                    },
+                    {
+                      "id": "$chapterUrlPath",
+                      "sourceElement": "chapterAhref",
+                      "actions": [
+                        {
+                          "action": "substringWithRegex",
+                          "regex": "href=\".*?\""
+                        },
+                        {
+                          "action": "substringWithModifiedRange",
+                          "location": 6,
+                          "length": -7
+                        },
+                        {
+                          "action": "insertString",
+                          "index": 0,
+                          "string": "http:"
+                        },
+                        {
+                          "action": "findRegexAndJump",
+                          "regex": "\\.(htm|html)$",
+                          "actionIDIfNotFound": "end"
+                        },
+                        {
+                          "action": "removePageComponent"
+                        },
+                        {
+                          "id": "end"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "$chapterNo",
+                      "sourceElement": "chapterAhref",
+                      "actions": [
+                        {
+                          "action": "substringWithRegex",
+                          "regex": " \\d{0,}(\\.\\d{1,})?</a>"
+                        },
+                        {
+                          "action": "substringWithModifiedRange",
+                          "location": 1,
+                          "length": -5
+                        }
+                      ]
+                    },
+                    {
+                      "id": "$chapterTitle",
+                      "sourceElement": "itemContent",
+                      "actions": [
+                        {
+                          "action": "substringWithRegex",
+                          "regex": "<span class=\"title nowrap\">.*?</span>"
+                        },
+                        {
+                          "action": "substringWithModifiedRange",
+                          "location": 27,
+                          "length": -34
+                        }
+                      ]
+                    },
+                    {
+                      "id": "$chapterReleasedOn",
+                      "sourceElement": "itemContent",
+                      "actions": [
+                        {
+                          "action": "substringWithRegex",
+                          "regex": "<span class=\"date\">.*?</span>"
+                        },
+                        {
+                          "action": "substringWithModifiedRange",
+                          "location": 19,
+                          "length": -26
+                        },
+                        {
+                          "action": "findRegexAndSetValue",
+                          "regex": "(?i)today|hour|hours|minute|minutes",
+                          "valueIfFound": "today"
+                        },
+                        {
+                          "action": "findRegexAndSetValue",
+                          "regex": "(?i)yesterday",
+                          "valueIfFound": "yesterday"
+                        },
+                        {
+                          "action": "findRegexAndJump",
+                          "regex": "today|yesterday",
+                          "actionIDIfFound": "end"
+                        },
+                        {
+                          "action": "convertToDate",
+                          "format": "MMM dd, yyyy"
+                        },
+                        {
+                          "id": "end"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "action": "insertElementToAllArrayItems",
+                  "fromElementID": "volumeNo",
+                  "toElementID": "$volumeNo"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "action": "jump",
+          "actionID": "transformBackToSimple"
+        },
+        {
+          "id": "mobileMode",
+          "action": "componentsMatchedByRegex",
+          "regex": "(?s)<dl>.*?</dl>"
+        },
+        {
+          "action": "reverseArray"
+        },
+        {
+          "action": "transformSimpleArrayItemToComplex",
+          "elements": [
+            {
+              "id": "volumeNo",
+              "sourceElement": "itemContent",
+              "actions": [
+                {
+                  "action": "substringWithRegex",
+                  "regex": ">Volume .*?</span>"
+                },
+                {
+                  "action": "substringWithModifiedRange",
+                  "location": 8,
+                  "length": -15
+                }
+              ]
+            },
+            {
+              "id": "volumeChapters",
+              "sourceElement": "itemContent",
+              "actions": [
+                {
+                  "action": "componentsMatchedByRegex",
+                  "regex": "(?s)<a .*?</a>"
+                },
+                {
+                  "action": "reverseArray"
+                },
+                {
+                  "action": "transformSimpleArrayItemToComplex",
+                  "elements": [
+                    {
+                      "id": "$chapterUrlPath",
+                      "sourceElement": "itemContent",
+                      "actions": [
+                        {
+                          "action": "substringWithRegex",
+                          "regex": "href=\".*?\""
+                        },
+                        {
+                          "action": "substringWithModifiedRange",
+                          "location": 6,
+                          "length": -7
+                        },
+                        {
+                          "action": "insertString",
+                          "index": 0,
+                          "string": "http:"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "chapterNoAndTitlePart",
+                      "sourceElement": "itemContent",
+                      "actions": [
+                        {
+                          "action": "substringWithRegex",
+                          "regex": "(?s)\\s+?Ch .*?<span"
+                        },
+                        {
+                          "action": "substringWithModifiedRange",
+                          "location": 0,
+                          "length": -5
+                        }
+                      ]
+                    },
+                    {
+                      "id": "$chapterNo",
+                      "sourceElement": "chapterNoAndTitlePart",
+                      "actions": [
+                        {
+                          "action": "substringWithRegex",
+                          "regex": "Ch \\d{0,}(\\.\\d{1,})?"
+                        },
+                        {
+                          "action": "substringWithModifiedRange",
+                          "location": 3,
+                          "length": -3
+                        }
+                      ]
+                    },
+                    {
+                      "id": "$chapterTitle",
+                      "sourceElement": "chapterNoAndTitlePart",
+                      "actions": [
+                        {
+                          "action": "substringWithRegex",
+                          "regex": "(?s)Ch \\d{0,}(\\.\\d{1,})?.*"
+                        },
+                        {
+                          "action": "substringWithModifiedRange",
+                          "location": 3,
+                          "length": -3
+                        },
+                        {
+                          "action": "substringWithRegex",
+                          "regex": "(?s)\\s.*"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "$chapterReleasedOn",
+                      "sourceElement": "itemContent",
+                      "actions": [
+                        {
+                          "action": "componentsMatchedByRegex",
+                          "regex": "<span .*?</span>"
+                        },
+                        {
+                          "action": "getLastObject"
+                        },
+                        {
+                          "action": "substringWithRegex",
+                          "regex": ">.*?<"
+                        },
+                        {
+                          "action": "substringWithModifiedRange",
+                          "location": 1,
+                          "length": -2
+                        },
+                        {
+                          "action": "findRegexAndSetValue",
+                          "regex": "(?i)today|hour|hours|minute|minutes|min|mins",
+                          "valueIfFound": "today"
+                        },
+                        {
+                          "action": "findRegexAndSetValue",
+                          "regex": "(?i)yesterday",
+                          "valueIfFound": "yesterday"
+                        },
+                        {
+                          "action": "findRegexAndJump",
+                          "regex": "today|yesterday",
+                          "actionIDIfFound": "end"
+                        },
+                        {
+                          "action": "convertToDate",
+                          "format": "MMM dd, yyyy"
+                        },
+                        {
+                          "id": "end"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "action": "insertElementToAllArrayItems",
+                  "fromElementID": "volumeNo",
+                  "toElementID": "$volumeNo"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "transformBackToSimple",
+          "action": "transformComplexArrayItemToSimple",
+          "simpleElementID": "volumeChapters"
+        },
+        {
+          "action": "mergeSubArrays"
+        }
+      ]
+    }
+  ],
+  "chapterInfoParser": [
+    {
+      "id": "$displayMessage",
+      "sourceElement": "content",
+      "actions": [
+        {
+          "action": "findRegexAndSetValue",
+          "regex": "licensed and not available",
+          "valueIfFound": "This title is licensed and not available on the website",
+          "valueIfNotFound": ""
+        }
+      ]
+    },
+    {
+      "id": "$pages",
+      "sourceElement": "content",
+      "actions": [
+        {
+          "action": "findRegexAndJump",
+          "regex": "(?s)<select onchange=\"change_page\\(this\\)\".*?</select>",
+          "actionIDIfNotFound": "mobileMode"
+        },
+        {
+          "action": "substringWithRegex",
+          "regex": "(?s)<select onchange=\"change_page\\(this\\)\".*?</select>"
+        },
+        {
+          "action": "jump",
+          "actionID": "processOptions"
+        },
+        {
+          "id": "mobileMode",
+          "action": "substringWithRegex",
+          "regex": "(?s)<select class=\"mangaread-page\".*?</select>"
+        },
+        {
+          "id": "processOptions",
+          "action": "componentsMatchedByRegex",
+          "regex": "<option.*?</option>"
+        },
+        {
+          "action": "transformSimpleArrayItemToComplex",
+          "elements": [
+            {
+              "id": "$pageNo",
+              "sourceElement": "itemContent",
+              "actions": [
+                {
+                  "action": "findRegexAndJump",
+                  "regex": "value=\"//",
+                  "actionIDIfFound": "getOptionText"
+                },
+                {
+                  "action": "substringWithRegex",
+                  "regex": "value=\".*?\""
+                },
+                {
+                  "action": "substringWithModifiedRange",
+                  "location": 7,
+                  "length": -8
+                },
+                {
+                  "action": "jump",
+                  "actionID": "end"
+                },
+                {
+                  "id": "getOptionText",
+                  "action": "substringWithRegex",
+                  "regex": ">.*?<"
+                },
+                {
+                  "action": "substringWithModifiedRange",
+                  "location": 1,
+                  "length": -2
+                },
+                {
+                  "id": "end"
+                }
+              ]
+            },
+            {
+              "id": "$pageUrlPath",
+              "sourceElement": "parent:chapterUrlPath",
+              "actions": [
+                {
+                  "action": "findRegexAndJump",
+                  "regex": "\\.(htm|html)$",
+                  "actionIDIfNotFound": "noPageComponent"
+                },
+                {
+                  "action": "removePageComponent"
+                },
+                {
+                  "id": "noPageComponent",
+                  "action": "findRegexAndJump",
+                  "regex": "/$",
+                  "actionIDIfFound": "addPageComponent"
+                },
+                {
+                  "action": "appendString",
+                  "string": "/"
+                },
+                {
+                  "id": "addPageComponent",
+                  "action": "appendElement",
+                  "elementID": "$pageNo"
+                },
+                {
+                  "action": "appendString",
+                  "string": ".html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "action": "removeArrayItemsWithConditions",
+          "elements": [
+            {
+              "id": "$pageNo",
+              "value": "0"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "pageInfoParser": [
+    {
+      "id": "imageElement",
+      "sourceElement": "content",
+      "actions": [
+        {
+          "action": "substringWithRegex",
+          "regex": "<img.*?id=\"image\".*?/>"
+        }
+      ]
+    },
+    {
+      "id": "$pageImageUrlPath",
+      "sourceElement": "imageElement",
+      "actions": [
+        {
+          "action": "substringWithRegex",
+          "regex": "src=\".*?\""
+        },
+        {
+          "action": "substringWithModifiedRange",
+          "location": 5,
+          "length": -6
+        },
+        {
+          "action": "convertHTMLToPlainText"
+        }
+      ]
+    },
+    {
+      "id": "$pageImageUrlPath2",
+      "sourceElement": "imageElement",
+      "actions": [
+        {
+          "action": "substringWithRegex",
+          "regex": "onerror=\"this.src='.*?'\""
+        },
+        {
+          "action": "substringWithModifiedRange",
+          "location": 19,
+          "length": -21
+        },
+        {
+          "action": "convertHTMLToPlainText"
+        }
+      ]
+    }
+  ],
+  "mangaUrlPathTransformer": [
+    {
+      "id": "$transformedUrlPath",
+      "sourceElement": "urlPath",
+      "actions": [
+        {
+          "action": "replaceString",
+          "from": "https://",
+          "to": "http://"
+        },
+        {
+          "action": "replaceString",
+          "from": "mangafox.me",
+          "to": "mangafox.la"
+        },
+        {
+          "action": "replaceString",
+          "from": "mangafox.la",
+          "to": "fanfox.net"
+        },
+        {
+          "action": "replaceString",
+          "from": "http://www.fanfox.net",
+          "to": "http://m.fanfox.net"
+        }
+      ]
+    }
+  ]
+}
