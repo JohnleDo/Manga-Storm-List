@@ -7,7 +7,6 @@ import time
 import os
 import logging
 
-
 class MangaListExtractor:
     def __init__(self, filename):
         """
@@ -23,8 +22,9 @@ class MangaListExtractor:
             file.close()
             self.mangaList = []
         elif filename.endswith(".json"):
-            self.mangaList = json.loads(filename)
-            self.mangaDF = pd.DataFrame(self.mangaList)
+            with open(filename) as json_file:
+                self.mangaList = json.load(json_file)
+                self.mangaDF = pd.DataFrame(self.mangaList)
 
     def get_manga_hosts(self):
         """
@@ -106,6 +106,7 @@ class MangaListExtractor:
         """
         for manga in self.mangaList:
             manga["Kitsu ID"] = None
+            manga["Manga Type"] = None
             manga["Ignore"] = False
 
     def get_manga_info(self):
@@ -142,8 +143,21 @@ class MangaListExtractor:
 
 class MangaComparer:
     def __init__(self, newMangaList, oldMangaList):
-        self.newList = newMangaList.mangaDF
         self.oldList = oldMangaList.mangaDF
+        self.newList = newMangaList.mangaDF
+        self.newList = self.newList.merge(self.oldList, how="left", on=["Title"]).drop(["Kitsu ID_x", "Ignore_x",
+                                                                                        "Host_y", "Status_y",
+                                                                                        "Manga Link_y", "Manga Type_x"],
+                                                                                       axis=1)
+        self.newList = self.newList.rename(index=str, columns={"Host_x": "Host",
+                                                               "Status_x": "Status",
+                                                               "Manga Link_x": "Manga Link",
+                                                               "Kitsu ID_y": "Kitsu ID",
+                                                               "Manga Type_y": "Manga Type",
+                                                               "Ignore_y": "Ignore"})
+        self.newList = self.newList.where(pd.notnull(self.newList), None)
+        self.newList["Ignore"].fillna(value=False, inplace=True)
+
 
     def find_differences(self):
         """
@@ -194,7 +208,7 @@ class Kitsu:
         """
         mangas = requests.get(self.url + "/edge/library-entries?filter[kind]=manga&filter[user_id]="
                               + self.user_id + "&fields[libraryEntries]=id" + "&include=manga"
-                              + "&fields[manga]=titles,status" + "&page[limit]=500", headers=self.header).json()
+                              + "&fields[manga]=titles,status,mangaType" + "&page[limit]=500", headers=self.header).json()
         self.KitsuMangaList = self.KitsuMangaList + mangas["included"]
         print("Manga currently found from Kitsu: {}".format(len(self.KitsuMangaList)), end="\r")
 
@@ -241,7 +255,8 @@ class Kitsu:
                                 if title.lower() == manga["Title"].lower():
                                     logging.debug("Index: " + str(index) + " " + manga["Title"] + " ID: " + result["data"][0]["id"])
                                     self.JSONMangaList.append({"Index": index, "Title": manga["Title"],
-                                                               "Kitsu ID": result["data"][0]["id"]})
+                                                               "Kitsu ID": result["data"][0]["id"],
+                                                               "Manga Type": result["data"][0]["attributes"]["mangaType"]})
                                     matched = True
                                     break
 
@@ -252,17 +267,20 @@ class Kitsu:
                                         if AB_title.lower() == manga["Title"].lower():
                                             logging.debug("Index: " + str(index) + " " + manga["Title"] + " ID: " + result["data"][0]["id"])
                                             self.JSONMangaList.append({"Index": index, "Title": manga["Title"],
-                                                                       "Kitsu ID": result["data"][0]["id"]})
+                                                                       "Kitsu ID": result["data"][0]["id"],
+                                                                        "Manga Type": result["data"][0]["attributes"]["mangaType"]})
                                             matched = True
 
                             if matched is False:
                                 logging.debug("Index: " + str(index) + " " + manga["Title"] + " ID: " + "N/A")
                                 self.JSONMangaList.append({"Index": index, "Title": manga["Title"],
-                                                           "Kitsu ID": None})
+                                                           "Kitsu ID": None,
+                                                           "Manga Type": None})
                 else:
                     logging.debug("Index: " + str(index) + " " + manga["Title"] + " ID: " + "N/A")
                     self.JSONMangaList.append({"Index": index, "Title": manga["Title"],
-                                               "Kitsu ID": None})
+                                               "Kitsu ID": None,
+                                               "Manga Type": None})
 
                 logging.debug("Manga Finished being proceed: " + manga["Title"])
 
@@ -297,37 +315,133 @@ class Kitsu:
             if ((manga["Kitsu ID"] is not None) and (mangaList[manga["Index"]]["Title"] == manga["Title"]) and
                (mangaList[manga["Index"]]["Kitsu ID"] is None)):
                 mangaList[manga["Index"]]["Kitsu ID"] = manga["Kitsu ID"]
+                mangaList[manga["Index"]]["Manga Type"] = manga["Manga Type"]
                 logging.debug("Updated {}, Index: {}".format(manga["Title"], manga["Index"]))
                 counter = counter + 1
         print("Number of Manga IDs Updated: " + str(counter))
 
         return mangaList
 
-    def drop_update(self):
-        self.s = 1
-
+    def find_dropped_manga(self, mangaList):
+        self.get_current_library_entries()
+        for index, kitsu_manga in enumerate(self.KitsuMangaList):
+            titles = list(filter(None, list(kitsu_manga["attributes"]["titles"].values())))
+            if not any(manga["Kitsu ID"] == kitsu_manga["id"] for manga in mangaList):
+                print("==========================================================")
+                print("Manga Not Found in list from Kitsu: {}".format(titles[0]))
+                print("Index: {}".format(index))
+                print("Manga ID: {}".format(kitsu_manga["id"]))
+                print("Manga Type: {}".format(kitsu_manga["attributes"]["mangaType"]))
+                print("==========================================================")
+            else:
+                print("==========================================================")
+                print("Manga in list from Kitsu: {}".format(titles[0]))
+                print("Index: {}".format(index))
+                print("Manga ID: {}".format(kitsu_manga["id"]))
+                print("Manga Type: {}".format(kitsu_manga["attributes"]["mangaType"]))
+                print("==========================================================")
 
     def request_test(self, something):
         self.test = requests.get(something).json()
 
 
+def menu_option():
+    print("Welcome to the MangaStorm to Kitsu Updater/Exactor")
+    while True:
+        print("List Of Options")
+        print("=====================================================================")
+        print("1. Extract manga information from a .msbf file")
+        print("2. Update Manga List with another existing Manga List")
+        print("3. Attempt to find and update all manga id in JSON file")
+        print("4. Update Kitsu Website with JSON File")
+        print("5. Exit")
+        print("=====================================================================")
+
+        user_input = input("Please enter option: ")
+
+        if user_input == "1":
+            print("\nMSBF files")
+            print("=====================================================================")
+            for file in os.listdir():
+                if file.endswith(".msbf"):
+                    print(file)
+            print("=====================================================================")
+            msbffile = input("Please enter name of .msbf file to extract from: ")
+
+            mangaListExtraction = MangaListExtractor(msbffile)
+            mangaListExtraction.get_manga_info()
+            filename = input("Please enter a name to save the file as (make sure to add .json at the end of filename): ")
+            mangaListExtraction.write_to_json(filename)
+            print("\n")
+
+        elif user_input == "2":
+            print("\n*********************************************************************")
+            print("Note: This option works by requiring the user to have a pre-existing JSON file that has Manga IDs")
+            print("This will work by taking a old JSON file and taking all the IDs that it should already have and")
+            print("merge it with our new JSON file that should have any IDs.")
+            print("*********************************************************************")
+
+            print("\nJSON Files")
+            print("=====================================================================")
+            for file in os.listdir():
+                if file.endswith(".json"):
+                    print(file)
+            print("=====================================================================")
+            newfile = input("Please enter name of new .json file to update: ")
+            oldfile = input("Please enter name of old .json file to with: ")
+
+            newList = MangaListExtractor(newfile)
+            oldList = MangaListExtractor(oldfile)
+
+            comparer = MangaComparer(newList, oldList)
+
+            newList.mangaList = comparer.newList.to_dict(orient="records")
+            newList.write_to_json(newfile)
+
+        elif user_input == "3":
+            print("\nJSON Files")
+            print("=====================================================================")
+            for file in os.listdir():
+                if file.endswith(".json"):
+                    print(file)
+            print("=====================================================================")
+            jsonfile = input("Please enter name of .json file to update: ")
+            username = input("Please enter Kitsu username: ")
+            password = input("Please enter Kitsu password: ")
+
+            jsonmangaList = MangaListExtractor(jsonfile)
+            KitsuUpdater = Kitsu(username, password)
+            KitsuUpdater.get_manga_ids(jsonmangaList.mangaList)
+            jsonmangaList.mangaList = KitsuUpdater.update_list(jsonmangaList.mangaList)
+            jsonmangaList.write_to_json(jsonfile)
+            print("\n")
+
+        elif user_input == "4":
+            print("Option 4")
+        elif user_input == "5":
+            break
+        else:
+            print("Invalid input")
+
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
-
-    newList = MangaListExtractor("favorites.msbf")
-    oldList = MangaListExtractor("favorites-old.msbf")
+    """
+    newList = MangaListExtractor("something.json")
+    oldList = MangaListExtractor("something-old.json")
     newListKitsu = Kitsu("Kitsuneace", "Cookie100203")
     oldListKitsu = Kitsu("Kitsuneace", "Cookie100203")
 
-    newList.get_manga_info()
-    oldList.get_manga_info()
+    # newList.get_manga_info()
+    # oldList.get_manga_info()
 
-    newListKitsu.get_manga_ids(newList.mangaList)
-    oldListKitsu.get_manga_ids(oldList.mangaList)
+    # newListKitsu.get_manga_ids(newList.mangaList)
+    # oldListKitsu.get_manga_ids(oldList.mangaList)
 
-    newList.mangaList = newListKitsu.update_list(newList.mangaList)
-    oldList.mangaList = oldListKitsu.update_list(oldList.mangaList)
-    newList.update_df()
-    oldList.update_df()
+    # newList.mangaList = newListKitsu.update_list(newList.mangaList)
+    # oldList.mangaList = oldListKitsu.update_list(oldList.mangaList)
+    # newList.update_df()
+    # oldList.update_df()
 
-    comparer = MangaComparer(newList, oldList)
+    comparer = MangaComparer(newList, oldList)"""
+    menu_option()
+
