@@ -1,355 +1,515 @@
-import os
-import re
 import pandas as pd
-from pandas import ExcelWriter
-from difflib import SequenceMatcher
-from tqdm import tqdm
-from sys import platform
-from multiprocessing import Pool, Manager, freeze_support
+import re
+import json
+import requests
+from multiprocessing import Pool, Manager
+import datetime
+import os
+import logging
 
-"""
-Note: Currently works best on a Linux OS due to having multiprocessing capabilities. Windows is not able to do multiprocessing due to it
-      not forking correctly (I think). In the meantime, use substitue script for Windows.
-R - Reading
-Y - Completed
-A - Archived
-N - Not Reading
+class MangaListExtractor:
+    def __init__(self, filename):
+        """
+        :param filename: Must pass a file. The two options are a .json or .msbf file.
+        Functionality: If its a .msbf file it will read all the lines and store it as a list of lines. As for .json file
+        it will read it as a list of dicts. This json file should be formatted with keys such as title, Kitsu ID, host,
+        manga link, and ignore.
+        """
+        if filename.endswith(".msbf"):
+            pd.set_option('display.max_rows', None)
+            file = open(filename, "r", encoding="UTF-8")
+            self.fileInfo = file.readlines()[1:]
+            file.close()
+            self.mangaList = []
+        elif filename.endswith(".json"):
+            with open(filename) as json_file:
+                self.mangaList = json.load(json_file)
+                self.mangaDF = pd.DataFrame(self.mangaList)
 
-------------------
-TO DO
-------------------
-1. Get rid of JPN Title and change back ENG Title back to just Title. Don't think JPN Title will be necessary after some rethinking.
-"""
-newline_tabregex = r'\t|\n'
-matchfilterregex = r'(\s|:|/|\?)*'
-Linkregex = r'http(s)*://([A-Z]|[a-z]|[0-9]|\s|(\.)|/|-|_|\?|=|&)*'
-Rstatusregex = r'\tR\t[0-9]+.[0-9]+'
-Ystatusregex = r'\tY\t[0-9]+.[0-9]+'
-Astatusregex = r'\tA\t[0-9]+.[0-9]+'
-Nstatusregex = r'\tN\t[0-9]+.[0-9]+'
-mangadexregex = r'z13mangadex'
-mangahereregex = r'z03mangahere'
-mangatownregex = r'z09mangatown'
-mangafoxregex = r'mangafox'
-mangareaderregex = r'mangareader'
-mangahomeregex = r'mangahome'
-mangapandaregex = r'z05mangapanda'
-kissmangaregex = r'z06kissmanga'
-readmangatodayregex = r'z10readmangatoday'
-mangakoiregex = r'z12mangakoi'
-mangaedenregex = r'z01mangaeden'
-mangafoxmbregex = r'mangafoxmb'
-mangainfo = {'ENG Title': "", 'JPN Title:': "", 'Current Chapter': "", 'Status': "", 'Host': "", 'Manga Link': "", 'Kitsu Link': "", 'File': ""}
-mangalist = []
-mangafiles = []
-lines2 = []
-resultchecker = 0
-manager = Manager()
-shared_list = manager.list()
+    def get_manga_hosts(self):
+        """
+        Functionality: Will go through each line and parse for the host name while cutting it out and storing it into our dict list
+        """
+        mangaHost = ["z13mangadex",
+                     "z03mangahere",
+                     "z09mangatown",
+                     "mangafoxmb",
+                     "mangareader",
+                     "z12mangakoi",
+                     "mangahome",
+                     "z05mangapanda",
+                     "z06kissmanga",
+                     "z10readmangatoday",
+                     "z01mangaeden",
+                     "mangafox"]
 
+        for index, line in enumerate(self.fileInfo):
+            for host in mangaHost:
+                r = re.search(host, line)
+                if r is not None:
+                    self.mangaList.append({"Host": host})
+                    self.fileInfo[index] = re.sub(host, '', line)
+                    break
 
-# Function for clearing the screen
-def clear_screen():
-    if platform == "linux" or platform == "linux2" or platform == "darwin":
-        OScommand = 'clear'
+    def get_manga_statuses(self):
+        """
+        Functionality: Will go through each line and parse for the statuses of each of the manga while cutting it out
+        and storing it into our list of dicts. This one is a bit different due to it using the REG of the status along
+        with the weird numerical values found in those lines to better parse for them without taking part of the title.
+        """
+        mangaStatus = ["\tR\t[0-9]+.[0-9]+",
+                       "\tY\t[0-9]+.[0-9]+",
+                       "\tA\t[0-9]+.[0-9]+",
+                       "\tN\t[0-9]+.[0-9]+"]
+        for index, line in enumerate(self.fileInfo):
+            for status in mangaStatus:
+                r = re.search(status, line)
+                if r is not None:
+                    status_result = re.sub("[0-9]+\.[0-9]+", "", (re.sub("\t|\n", "", r[0])))
+                    if status_result == "R":
+                        self.mangaList[index]["Status"] = "current"
+                    elif status_result == "Y":
+                        self.mangaList[index]["Status"] = "completed"
+                    elif status_result == "A":
+                        self.mangaList[index]["Status"] = "on_hold"
+                    elif status_result == "N":
+                        self.mangaList[index]["Status"] = "dropped"
+                    else:
+                        self.mangaList[index]["Status"] = re.sub("[0-9]+\.[0-9]+", "",
+                                                                 (re.sub("\t|\n", "", r[0])))
+                    self.fileInfo[index] = re.sub(status, "", line)
 
-    elif platform == "win32" or platform == "win64":
-        OScommand = 'cls'
+    def get_manga_links(self):
+        """
+        Functionality: Will go through each line and parse for the links of each of the manga while cutting it out and
+        storing it into our list of dicts.
+        """
+        linkregex = r'http(s)*://([A-Z]|[a-z]|[0-9]|\s|(\.)|/|-|_|\?|=|&)*'
+        for index, line in enumerate(self.fileInfo):
+            r = re.search(linkregex, line)
+            if r is not None:
+                self.mangaList[index]["Manga Link"] = re.sub("\t|\n", "", re.search(linkregex, line).group())
+                self.fileInfo[index] = re.sub(linkregex, "", line)
 
-    else:
-        print("Could Not Detect Operating System")
-    os.system(OScommand)
+    def get_manga_titles(self):
+        """
+        Functionality: As long as this function is excuted after all the above has then it will go through each line and
+        just store the remaining string into our list of dicts.
+        """
+        for index, line in enumerate(self.fileInfo):
+            self.mangaList[index]["Title"] = re.sub("\t|\n", "", line)
 
+    def add_final_fields(self):
+        """
+        Functionality: This function is for adding the last fields that don't require any parsing of the original file
+        contexts.
+        """
+        for manga in self.mangaList:
+            manga["Kitsu ID"] = None
+            manga["Manga Type"] = None
+            manga["Ignore"] = False
 
-# Reading through each line and parsing each line for mangatype and cutting it out and storing it
-def get_hosts():
-    for x in range(len(lines)):
-        r = re.search(mangadexregex, lines[x])
-        if r is not None:
-            mangainfo['Host'] = mangadexregex
-            mangalist.append(mangainfo.copy())
-            lines2.append(re.sub(mangadexregex, '', lines[x]))
+    def get_manga_info(self):
+        """
+        Functionality: Simple function to excute all the required functions in the right order to get a complete list
+        then put into a DataFrame.
+        """
+        self.get_manga_hosts()
+        self.get_manga_statuses()
+        self.get_manga_links()
+        self.get_manga_titles()
+        self.add_final_fields()
+        self.mangaDF = pd.DataFrame(self.mangaList)
 
-        r = re.search(mangahereregex, lines[x])
-        if r is not None:
-            mangainfo['Host'] = mangahereregex
-            mangalist.append(mangainfo.copy())
-            lines2.append(re.sub(mangahereregex, '', lines[x]))
+    def update_df(self):
+        """
+        Functionality: Simple function to call for updating the object's dataFrame whenever the user updates the
+        mangaList.
+        """
+        self.mangaDF = pd.DataFrame(self.mangaList)
 
-        r = re.search(mangatownregex, lines[x])
-        if r is not None:
-            mangainfo['Host'] = mangatownregex
-            mangalist.append(mangainfo.copy())
-            lines2.append(re.sub(mangatownregex, '', lines[x]))
-
-        r = re.search(mangafoxregex, lines[x])
-        if r is not None:
-            mangainfo['Host'] = mangafoxregex
-            mangalist.append(mangainfo.copy())
-            lines2.append(re.sub(mangafoxregex, '', lines[x]))
-
-        r = re.search(mangareaderregex, lines[x])
-        if r is not None:
-            mangainfo['Host'] = mangareaderregex
-            mangalist.append(mangainfo.copy())
-            lines2.append(re.sub(mangareaderregex, '', lines[x]))
-
-        r = re.search(mangahomeregex, lines[x])
-        if r is not None:
-            mangainfo['Host'] = mangahomeregex
-            mangalist.append(mangainfo.copy())
-            lines2.append(re.sub(mangahomeregex, '', lines[x]))
-
-        r = re.search(mangapandaregex, lines[x])
-        if r is not None:
-            mangainfo['Host'] = mangapandaregex
-            mangalist.append(mangainfo.copy())
-            lines2.append(re.sub(mangapandaregex, '', lines[x]))
-
-        r = re.search(kissmangaregex, lines[x])
-        if r is not None:
-            mangainfo['Host'] = kissmangaregex
-            mangalist.append(mangainfo.copy())
-            lines2.append(re.sub(kissmangaregex, '', lines[x]))
-
-        r = re.search(readmangatodayregex, lines[x])
-        if r is not None:
-            mangainfo['Host'] = readmangatodayregex
-            mangalist.append(mangainfo.copy())
-            lines2.append(re.sub(readmangatodayregex, '', lines[x]))
-
-        r = re.search(mangakoiregex, lines[x])
-        if r is not None:
-            mangainfo['Host'] = mangakoiregex
-            mangalist.append(mangainfo.copy())
-            lines2.append(re.sub(mangakoiregex, '', lines[x]))
-
-        r = re.search(mangaedenregex, lines[x])
-        if r is not None:
-            mangainfo['Host'] = mangaedenregex
-            mangalist.append(mangainfo.copy())
-            lines2.append(re.sub(mangaedenregex, '', lines[x]))
-
-        r = re.search(mangafoxmbregex, lines[x])
-        if r is not None:
-            mangainfo['Host'] = mangafoxmbregex
-            mangalist.append(mangainfo.copy())
-            lines2.append(re.sub(mangafoxmbregex, '', lines[x]))
-
-
-# Reading through each line and parsing each line for manga status and cutting it out and storing it
-def get_status():
-    del lines[:]
-    for x in range(len(lines2)):
-        r = re.search(Rstatusregex, lines2[x])
-        if r is not None:
-            temp = mangalist[x]
-            temp['Status'] = "R"
-            mangalist[x] = temp
-            lines.append(re.sub(Rstatusregex, '', lines2[x]))
-
-        r = re.search(Ystatusregex, lines2[x])
-        if r is not None:
-            temp = mangalist[x]
-            temp['Status'] = "Y"
-            mangalist[x] = temp
-            lines.append(re.sub(Ystatusregex, '', lines2[x]))
-
-        r = re.search(Astatusregex, lines2[x])
-        if r is not None:
-            temp = mangalist[x]
-            temp['Status'] = "A"
-            mangalist[x] = temp
-            lines.append(re.sub(Astatusregex, '', lines2[x]))
-
-        r = re.search(Nstatusregex, lines2[x])
-        if r is not None:
-            temp = mangalist[x]
-            temp['Status'] = "N"
-            mangalist[x] = temp
-            lines.append(re.sub(Nstatusregex, '', lines2[x]))
+    def write_to_json(self, filename):
+        """
+        :param filename: This parameter requires the user to give a name for the file to be created/updated
+        Functionality: This function is for writing a new json file with all the new opening filepath information as
+        well as the old ones.
+        """
+        date = str(datetime.datetime.now().date())
+        with open((filename + "-" + date), "w") as jsonFile:
+            jsonFile.seek(0)
+            json.dump(self.mangaList, jsonFile, indent=4, ensure_ascii=False)
+            jsonFile.truncate()
+            print(filename + " has been updated/created.")
 
 
-# Reading through each line and parsing each line for website link and cutting it out and storing it
-def get_mangalink():
-    del lines2[:]
-    for x in range(len(lines)):
-        r = re.search(Linkregex, lines[x])
-        if r is not None:
-            temp = mangalist[x]
-            temp['Manga Link'] = re.sub(newline_tabregex, '', re.search(Linkregex, lines[x]).group())
-            mangalist[x] = temp
-            lines2.append(re.sub(Linkregex, '', lines[x]))
+class MangaComparer:
+    def __init__(self, newMangaList, oldMangaList):
+        self.oldList = oldMangaList.mangaDF
+        self.newList = newMangaList.mangaDF
+        self.newList = self.newList.merge(self.oldList, how="left", on=["Title"]).drop(["Kitsu ID_x", "Ignore_x",
+                                                                                        "Host_y", "Status_y",
+                                                                                        "Manga Link_y", "Manga Type_x"],
+                                                                                       axis=1)
+        self.newList = self.newList.rename(index=str, columns={"Host_x": "Host",
+                                                               "Status_x": "Status",
+                                                               "Manga Link_x": "Manga Link",
+                                                               "Kitsu ID_y": "Kitsu ID",
+                                                               "Manga Type_y": "Manga Type",
+                                                               "Ignore_y": "Ignore"})
+        self.newList = self.newList.where(pd.notnull(self.newList), None)
+        self.newList["Ignore"].fillna(value=False, inplace=True)
 
 
-# Reading through each line while removing newlines and tabs
-def get_engtitle():
-    del lines[:]
-    for x in range(len(lines2)):
-        temp = mangalist[x]
-        temp['ENG Title'] = re.sub(newline_tabregex, '', lines2[x])
-        mangalist[x] = temp
+    def find_differences(self):
+        """
+        This function will find the titles that were not found in the old list from the new list.
+        """
+        rows_to_be_dropped = []
+        for newList_index, newList_row in self.newList.iterrows():
+            similarities = self.oldList.loc[(self.oldList["Title"] == newList_row["Title"]) &
+                                            (self.oldList["Host"] == newList_row["Host"])]
+            if not similarities.empty:
+                rows_to_be_dropped.append(newList_index)
+        differences = self.newList.drop(index=rows_to_be_dropped)
 
 
-# Finding all .dat files for manga information and storing the file name
-def get_mangafiles():
-    # Grabbing all .dat files in directory and subdirectory
-    for root, dirs, files in os.walk(top):
-        for file in files:
-            if file.endswith(".dat"):
-                mangafiles.append(file)
+class Kitsu:
+    def __init__(self, username, password):
+        """
+        :param username: Username used for Kitsu to log in.
+        :param password: Password used for Kitsu to log in.
+        Funcationality: This will log in to the user's Kitsu account and grab all the necessary information to be used
+        later on like the access token.
+        """
+        self.KitsuMangaList = []
+        self.JSONMangaList = Manager().list()
+        self.url = "https://kitsu.io/api"
+        getTokenurl = "/oauth/token?grant_type=password&username=<username>&password=<password>"
+        getTokenurl = getTokenurl.replace("<username>", username)
+        getTokenurl = getTokenurl.replace("<password>", password)
+        jsonInfo = requests.post(self.url + getTokenurl).json()
+        self.access_token = jsonInfo["access_token"]
+        self.token_type = jsonInfo["token_type"]
+        self.header = {"Authorization": self.token_type + ' ' + self.access_token}
+        self.user_id = requests.get(self.url + "/edge/users?filter[self]=true",
+                                    headers=self.header).json()["data"][0]["id"]
 
-    print("Finding Manga Files")
+    def get_current_library_entries(self):
+        """
+        Functionality: Will get all the current manga the user has stored on their Kitsu Account.
+        1. filter[kind]=manga - This specify what library we want to look at it be anime or manga.
+        2. filter[user_id]= user_id - This is whoses library to look at.
+        3. fields[libraryEntries]=id - When doing this GET requests it includes a bunch of garbage we don't need that
+           has a lot of fields. So this is to make it more bearable by limiting it to display only the id field.
+        4. include=manga - This is to actually get the manga information for all of them.
+        5. fields[manga]=titles,status - This is to limit the fields from our mangas we get to just the titles and
+           statuses.
+        6.  page[limit]=500 - By default it will only show 10 mangas per page so changing it to 500 to get the max
+            amount per page to speed up the time we're navigating through pages collecting all the manga infomation.
+        """
+        mangas = requests.get(self.url + "/edge/library-entries?filter[kind]=manga&filter[user_id]="
+                              + self.user_id + "&fields[libraryEntries]=id" + "&include=manga"
+                              + "&fields[manga]=titles,status,mangaType" + "&page[limit]=500", headers=self.header).json()
+        self.KitsuMangaList = self.KitsuMangaList + mangas["included"]
+        print("Manga currently found from Kitsu: {}".format(len(self.KitsuMangaList)), end="\r")
 
-    # Creating an empty list to use to iterate for multiprocessing and creating a pool of workers
-    iteration = list(range(0, len(mangalist)))
-    pool = Pool()
-    for x in tqdm(pool.imap(get_outer, iteration), total=len(iteration)):
-        pass
-    pool.close()
-    pool.join()
+        if "next" in mangas["links"]:
+            while True:
+                mangas = requests.get(mangas["links"]["next"]).json()
+                if "next" in mangas["links"]:
+                    self.KitsuMangaList = self.KitsuMangaList + mangas["included"]
+                    print("Manga currently found from Kitsu: {}".format(len(self.KitsuMangaList)), end="\r")
+                else:
+                    self.KitsuMangaList = self.KitsuMangaList + mangas["included"]
+                    print("Manga currently found from Kitsu: {}".format(len(self.KitsuMangaList)), end="\r")
+                    break
 
-    # Multiprocessing does not share the global variables among the child processes so we store it in a shared variable and then put the new information
-    # back to our mangalist.
-    for x in range(len(shared_list)):
-        mangalist[x] = shared_list[x]
+    def manga_search(self, title):
+        """
+        :param title: The title of the manga series.
+        :return: A list of dicts with a bunch of potential results matching that manga series.
+        Functionality: Uses the manga title to retrieve information regarding that manga but this will result in a list
+        of potential titles that match it.
+        """
+        result = requests.get("https://kitsu.io/api/edge/manga?filter[text]=" + title.replace(" ", "+")).json()
+        return result
+
+    def get_manga_id(self, index, manga):
+        """
+        :param index: Current index of manga within our list to keep track of the order of the manga within list to be
+        used later.
+        :param manga: This is a dict that contains information of our manga from the file it was retrieved from.
+        Functionality: Goes through all the potential results the Kitsu website gives us after looking it up and doing
+        its best to match it with the exact result.
+        """
+        if manga["Kitsu ID"] is None:
+            result = self.manga_search(manga["Title"].replace("%", "%25"))
+            logging.debug("Manga Currently being proceed: " + manga["Title"])
+
+            try:
+                if "data" in result and result["data"]:
+                    titles = list(result["data"][0]["attributes"]["titles"].values())
+                    matched = False
+                    if titles:
+                        for title in titles:
+                            if title is not None:
+                                if title.lower() == manga["Title"].lower():
+                                    logging.debug("Index: " + str(index) + " " + manga["Title"] + " ID: " + result["data"][0]["id"])
+                                    self.JSONMangaList.append({"Index": index, "Title": manga["Title"],
+                                                               "Kitsu ID": result["data"][0]["id"],
+                                                               "Manga Type": result["data"][0]["attributes"]["mangaType"]})
+                                    matched = True
+                                    break
+
+                        if matched is False:
+                            if result["data"][0]["attributes"]["abbreviatedTitles"]:
+                                for AB_title in result["data"][0]["attributes"]["abbreviatedTitles"]:
+                                    if AB_title is not None:
+                                        if AB_title.lower() == manga["Title"].lower():
+                                            logging.debug("Index: " + str(index) + " " + manga["Title"] + " ID: " + result["data"][0]["id"])
+                                            self.JSONMangaList.append({"Index": index, "Title": manga["Title"],
+                                                                       "Kitsu ID": result["data"][0]["id"],
+                                                                        "Manga Type": result["data"][0]["attributes"]["mangaType"]})
+                                            matched = True
+
+                            if matched is False:
+                                logging.debug("Index: " + str(index) + " " + manga["Title"] + " ID: " + "N/A")
+                                self.JSONMangaList.append({"Index": index, "Title": manga["Title"],
+                                                           "Kitsu ID": None,
+                                                           "Manga Type": None})
+                else:
+                    logging.debug("Index: " + str(index) + " " + manga["Title"] + " ID: " + "N/A")
+                    self.JSONMangaList.append({"Index": index, "Title": manga["Title"],
+                                               "Kitsu ID": None,
+                                               "Manga Type": None})
+
+                logging.debug("Manga Finished being proceed: " + manga["Title"])
+
+            except(KeyError, AttributeError, IndexError) as e:
+                logging.debug("Manga Error: " + manga["Title"])
+                logging.debug("Error type: " + e)
+                logging.info("Error")
+        else:
+            logging.debug("Index: " + str(index) + " " + manga["Title"] + " ID: " + "N/A")
+            self.JSONMangaList.append({"Index": index, "Title": manga["Title"],
+                                       "Kitsu ID": manga["Kitsu ID"]})
+        print("Manga's Finished Processing: {}".format(len(self.JSONMangaList)), end="\r")
+
+    def get_manga_ids(self, mangaList):
+        """
+        :param mangaList: Takes a list of dicts of manga. This should typically be from the MangaExtractor.mangaList
+        Functionality: This will use the multiprocessing based on however many cores the user has. It will take the
+        mangaList is recieved and split it up among the processes and retrieve all the information it can get.
+        """
+        with Pool(os.cpu_count()) as p:
+            p.starmap(self.get_manga_id, enumerate(mangaList))
+        print("\n")
+
+    def update_list(self, mangaList):
+        """
+        :param mangaList: Takes a list of dicts of manga. This should typically be from the MangaExtractor.mangaList
+        :return: Returns that same list back for the user to manipulate later.
+        Funcationality: Goes through the list of manga it recieved and updates it with the list of manga ids we got.
+        """
+        counter = 0
+        for manga in self.JSONMangaList:
+            if ((manga["Kitsu ID"] is not None) and (mangaList[manga["Index"]]["Title"] == manga["Title"]) and
+               (mangaList[manga["Index"]]["Kitsu ID"] is None)):
+                mangaList[manga["Index"]]["Kitsu ID"] = manga["Kitsu ID"]
+                mangaList[manga["Index"]]["Manga Type"] = manga["Manga Type"]
+                logging.debug("Updated {}, Index: {}".format(manga["Title"], manga["Index"]))
+                counter = counter + 1
+        print("Number of Manga IDs Updated: " + str(counter))
+
+        return mangaList
+
+    def find_dropped_manga(self, mangaList, referencefile):
+        if referencefile:
+            with open(referencefile) as ref_file:
+                ref_list = json.load(ref_file)
+
+        self.get_current_library_entries()
+        not_found_manga = []
+        for index, kitsu_manga in enumerate(self.KitsuMangaList):
+            titles = list(filter(None, list(kitsu_manga["attributes"]["titles"].values())))
+            if not any(manga["Kitsu ID"] == kitsu_manga["id"] for manga in mangaList):
+                not_found_manga.append({"Title": titles[0],
+                                       "ID": kitsu_manga["id"],
+                                        "Manga Type": kitsu_manga["attributes"]["mangaType"],
+                                        "Ignore": False})
+                logging.debug("==========================================================")
+                logging.debug("Manga Not Found in list from Kitsu: {}".format(titles[0]))
+                logging.debug("Index: {}".format(index))
+                logging.debug("Manga ID: {}".format(kitsu_manga["id"]))
+                logging.debug("Manga Type: {}".format(kitsu_manga["attributes"]["mangaType"]))
+                logging.debug("==========================================================")
+            else:
+                logging.debug("==========================================================")
+                logging.debug("Manga in list from Kitsu: {}".format(titles[0]))
+                logging.debug("Index: {}".format(index))
+                logging.debug("Manga ID: {}".format(kitsu_manga["id"]))
+                logging.debug("Manga Type: {}".format(kitsu_manga["attributes"]["mangaType"]))
+                logging.debug("==========================================================")
 
 
-# This is a basically the loop that would be found within a nested loop but was changed to multiprocessing could be implemented.
-def get_outer(xy):
-    # When using multiprocessing, the imap function passes a function and a list. This case xy is the list that we passed in to use as our iteration
-    x = xy
-    temp = mangalist[x]
-    for y in range(len(mangafiles)):
-        listname = re.sub(matchfilterregex, '', (mangalist[x]['Host'] + "_" + mangalist[x]['ENG Title'] + "_info.dat"))
-        filename = re.sub(matchfilterregex, '', mangafiles[y])
-        matcher = SequenceMatcher(None, listname, filename)
-        if matcher.ratio() == 1:
-            temp['File'] = mangafiles[y]
-            shared_list.append(temp)
-            resultchecker = 0
+        print("Number of not found manga from Kitsu in list: {}".format(len(not_found_manga)))
+        return not_found_manga
+
+    def write_to_json(self, filename, mangaList):
+        """
+        :param filename: This parameter requires the user to give a name for the file to be created/updated
+        :param mangaList: This parameter requires the user to give a list of manga titles to append to our JSON file
+        Functionality: This function is for creating/updating a JSON files with a list of dicts that was passed in.
+        """
+        date = str(datetime.datetime.now().date())
+        with open((filename + "-" + date), "w") as jsonFile:
+            jsonFile.seek(0)
+            json.dump(mangaList, jsonFile, indent=4, ensure_ascii=False)
+            jsonFile.truncate()
+            print(filename + " has been updated/created.")
+
+    def request_test(self, something):
+        self.test = requests.get(something).json()
+
+
+def menu_option():
+    print("Welcome to the MangaStorm to Kitsu Updater/Exactor")
+    while True:
+        print("List Of Options")
+        print("=======================================================================================================")
+        print("1. Extract manga information from a .msbf file")
+        print("2. Update Manga List with another existing Manga List")
+        print("3. Attempt to find and update all manga id in JSON file")
+        print("4. Find dropped series")
+        print("5. Manga ID finder")
+        print("6. Update Kitsu Website with dropped manga with JSON file")
+        print("7. Update Kitsu Website with JSON File")
+        print("8. Exit")
+        print("=======================================================================================================")
+
+        user_input = input("Please enter option: ")
+
+        if user_input == "1":
+            print("\nMSBF files")
+            print("===================================================================================================")
+            for file in os.listdir():
+                if file.endswith(".msbf"):
+                    print(file)
+            print("===================================================================================================")
+            msbffile = input("Please enter name of .msbf file to extract from: ")
+
+            mangaListExtraction = MangaListExtractor(msbffile)
+            mangaListExtraction.get_manga_info()
+            filename = input("Please enter a name to save the file as (make sure to add .json at the end of filename): ")
+            mangaListExtraction.write_to_json(filename)
+            print("\n")
+
+        elif user_input == "2":
+            print("\n*************************************************************************************************")
+            print("Note: This option works by requiring the user to have a pre-existing JSON file that has Manga IDs")
+            print("This will work by taking a old JSON file and taking all the IDs that it should already have and")
+            print("merge it with our new JSON file that should have any IDs.")
+            print("***************************************************************************************************")
+
+            print("\nJSON Files")
+            print("===================================================================================================")
+            for file in os.listdir():
+                if file.endswith(".json"):
+                    print(file)
+            print("===================================================================================================")
+            newfile = input("Please enter name of new .json file to update: ")
+            oldfile = input("Please enter name of old .json file to with: ")
+
+            newList = MangaListExtractor(newfile)
+            oldList = MangaListExtractor(oldfile)
+
+            comparer = MangaComparer(newList, oldList)
+
+            newList.mangaList = comparer.newList.to_dict(orient="records")
+            newList.write_to_json(newfile)
+
+        elif user_input == "3":
+            print("\nJSON Files")
+            print("=====================================================================")
+            for file in os.listdir():
+                if file.endswith(".json"):
+                    print(file)
+            print("=====================================================================")
+            jsonfile = input("Please enter name of .json file to update: ")
+            username = input("Please enter Kitsu username: ")
+            password = input("Please enter Kitsu password: ")
+
+            jsonmangaList = MangaListExtractor(jsonfile)
+            KitsuUpdater = Kitsu(username, password)
+            KitsuUpdater.get_manga_ids(jsonmangaList.mangaList)
+            jsonmangaList.mangaList = KitsuUpdater.update_list(jsonmangaList.mangaList)
+            jsonmangaList.write_to_json(jsonfile)
+            print("\n")
+
+        elif user_input == "4":
+            print("\n*************************************************************************************************")
+            print("Note: This options is for compiling a list of Mangas that was found on Kitsu but not found in the")
+            print("specified JSON fille. The use of this is to later update the Kitsu Website with series that was")
+            print("dropped by the user. It's also used for the user to double check their new JSON list and cross")
+            print("reference if the manga titles and IDs are correct with the ones found by the program. This can be")
+            print("seen with the program finding manga IDs for some series but putting the wrong ID due to it taking ")
+            print("the ID of a oneshot and not the actual running manga. This could've been avoided but MangaStorm")
+            print("doesn't include that in their file. Also, it will compare not_found_manga.json files to skip")
+            print("series that shouldn't be dropped")
+            print("***************************************************************************************************")
+
+            print("\nJSON Files")
+            print("===================================================================================================")
+            for file in os.listdir():
+                if file.endswith(".json"):
+                    print(file)
+            print("===================================================================================================")
+            jsonfile = input("Please enter name of new .json file to compare with mangas found on Kitsu: ")
+            username = input("Please enter Kitsu username: ")
+            password = input("Please enter Kitsu password: ")
+
+            jsonmangaList = MangaListExtractor(jsonfile)
+            KitsuUpdater = Kitsu(username, password)
+
+            user_input = input("Would you like to use a previous not_found_manga*.json file as a reference? (Y/N): ")
+            if user_input.lower() == "y" or user_input.lower() =="yes":
+                referencefile = input("Please enter name of not_found_manga*.json file to be used for reference: ")
+                mangaList = KitsuUpdater.find_dropped_manga(jsonmangaList.mangaList, referencefile)
+            else:
+                mangaList = KitsuUpdater.find_dropped_manga(jsonmangaList.mangaList)
+
+
+            user_input = input("Would you like to save not found mangas in JSON file? (Y/N): ")
+            if user_input.lower() == "y" or user_input.lower() =="yes":
+                KitsuUpdater.write_to_json("not_found_mangas.json", mangaList)
+
+            else:
+                print("Did not save results...")
+            print("\n")
+
+        elif user_input == "8":
             break
         else:
-            resultchecker = 1
-            continue
-    if resultchecker == 1:
-        temp['File'] = "No File Found"
-        shared_list.append(temp)
-
-
-# Goes through each manga .dat file that was found and runs multiple regexes to find the highest finished chapter
-def get_mangachapters():
-    print("Finding Manga Chapters")
-    clear_screen()
-    for x in tqdm(range(len(mangalist))):
-        if mangalist[x]['File'] == "No File Found":
-            temp = mangalist[x]
-            temp['Current Chapter'] = "N/A"
-            mangalist[x] = temp
-
-        if mangalist[x]['File'] != "No File Found":
-            temp = mangalist[x]
-            file = open(mangalist[x]['Host'] + "/" + mangalist[x]['File'], encoding="UTF-8")
-            lines = file.readlines()
-            file.close()
-
-            """
-            These regular expressions are for filtering the different types of formats for different manga series
-            1. Is for filtering out the ID found in each file
-            2. Is for filtering series that has chapters labeled with VOL number. Example: VOL5 34
-            3. Is for filtering series where there are duplicate chapters which uses a -2 in the chapter name. Example: 44-2
-            4. Is for filtering series where there are duplicate chapters which uses the title in the chapter name with the chapter number. Example: Ao-12
-            5. Is for filtering series where there are duplicate chapters which uses the title in the chapter name but for the first chapter doesn't
-                use the chapter number. Which is replaced with a value of 0. Example: Ao
-            6. Is for filtering series where after running the other regexes can result in a string of 0.0.- which is replaced by a zero value.
-            7. Is for filtering series where after running the other regexes can result in a string of 0.0. which is replaced by a zero value.
-            """
-            tempchap = re.sub(r'[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\.[0-9][0-9][0-9][0-9][0-9][0-9]', '', lines[2])
-            tempchap = re.sub(r'(([A-Z]|[a-z])+[0-9]+)\s', '', tempchap)
-            tempchap = re.sub(r'[0-9]+-[0-9]+', '0', tempchap)
-            tempchap = re.sub(r'([A-Z]|[a-z])+-', '', tempchap)
-            tempchap = re.sub(r'([A-Z]|[a-z])+', '0', tempchap)
-            tempchap = re.sub(r'0\.0\.-', '0', tempchap)
-            tempchap = re.sub(r'0\.0\.', '0', tempchap)
-            tempchap = tempchap.replace(' ', '')
-
-            curchapter = float(re.search(r'(([0-9]+|\.)*)', tempchap).group(1))
-
-            # We start at index 3 so we can skip the first 3 lines in the .dat file which only gives information about the manga and not the chapters we need.
-            for y in range(3, len(lines)):
-                tempchap = re.sub(r'[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\.[0-9][0-9][0-9][0-9][0-9][0-9]', '', lines[y])
-                tempchap = re.sub(r'(([A-Z]|[a-z])+[0-9]+)\s', '', tempchap)
-                tempchap = re.sub(r'[0-9]+-[0-9]+', '0', tempchap)
-                tempchap = re.sub(r'([A-Z]|[a-z])+-', '', tempchap)
-                tempchap = re.sub(r'([A-Z]|[a-z])+', '0', tempchap)
-                tempchap = re.sub(r'0\.0\.-', '0', tempchap)
-                tempchap = re.sub(r'0\.0\.', '0', tempchap)
-                tempchap = re.sub(r'_', '0', tempchap)
-                tempchap = tempchap.replace(' ', '')
-
-                if curchapter < float(re.search(r'(([0-9]+|\.)*)', tempchap).group(1)):
-                    curchapter = float(re.search(r'(([0-9]+|\.)*)', tempchap).group(1))
-
-                else:
-                    continue
-            temp['Current Chapter'] = curchapter
-            mangalist[x] = temp
-
-
-# Writing the dataframe to .xlsx file
-def save_excel(dataframe, excelName):
-    # Check if our mangalist already exists
-    # If it does exist we will extract some information from it and merging it with out new MangaList
-    if os.path.exists(excelName.replace(" ", "") + ".xlsx") is True:
-        # Reading preexisting MangaList file and extracting specific information from it
-        df_temp = pd.read_excel(excelName.replace(" ", "") + ".xlsx", sheet_name=excelName)
-        df_extract = df_temp[['ENG Title', 'JPN Title', 'Kitsu Link']].copy()
-
-        # Updating our dataframe with our existing shell file
-        dataframe = pd.merge(dataframe, df_extract, how='outer', on=['ENG Title']).drop(['JPN Title_x', 'Kitsu Link_x'], axis=1)
-        dataframe = dataframe[['ENG Title', 'JPN Title_y', 'Status', 'Current Chapter', 'Host', 'Manga Link', 'Kitsu Link_y', 'File']]
-        dataframe = dataframe.rename(index=str, columns={"JPN Title_y": "JPN Title", "Kitsu Link_y": "Kitsu Link"})
-        dataframe = dataframe.drop_duplicates(subset=['ENG Title', 'JPN Title', 'Status', 'Current Chapter', 'Host', 'Manga Link', 'Kitsu Link', 'File'], keep='first')
-        dataframe['Status'] = pd.Categorical(dataframe['Status'], ["R", "Y", "A"])
-        dataframe['Test'] = dataframe['ENG Title'].str.lower()
-        dataframe = dataframe.sort_values(['Status', 'Test'])
-        dataframe.drop('Test', axis=1, inplace=True)
-        dataframe.reset_index(drop=True, inplace=True)
-
-        # Now writing to our dataframe to .xlsx file after updating it with the shell file
-        writer = ExcelWriter(excelName.replace(" ", "") + ".xlsx", encoding="UTF-8")
-        dataframe.to_excel(writer, excelName, encoding="UTF-8")
-        writer.save()
-
-    else:
-        # Now writing to our dataframe to .xlsx file
-        writer = ExcelWriter(excelName.replace(" ", "") + ".xlsx", encoding="UTF-8")
-        dataframe.to_excel(writer, excelName, encoding="UTF-8")
-        writer.save()
-
-    return dataframe
-
+            print("Invalid input")
 
 if __name__ == '__main__':
-    freeze_support()
-    os.chdir('..')
-    os.chdir("Manga Storm/Container/Documents/UserData/")
-    top = os.getcwd()
+    logging.basicConfig(level=logging.INFO)
+    """newList = MangaListExtractor("something.json")
+    oldList = MangaListExtractor("something-old.json")
+    newListKitsu = Kitsu("Kitsuneace", "Cookie100203")
+    oldListKitsu = Kitsu("Kitsuneace", "Cookie100203")
 
-    file = open("favorites.dat", "r", encoding="UTF-8")
-    lines = file.readlines()
-    file.close()
+    # newList.get_manga_info()
+    # oldList.get_manga_info()
 
-    get_hosts()
-    get_status()
-    get_mangalink()
-    get_engtitle()
-    get_mangafiles()
-    get_mangachapters()
+    # newListKitsu.get_manga_ids(newList.mangaList)
+    # oldListKitsu.get_manga_ids(oldList.mangaList)
 
-    clear_screen()
+    # newList.mangaList = newListKitsu.update_list(newList.mangaList)
+    # oldList.mangaList = oldListKitsu.update_list(oldList.mangaList)
+    # newList.update_df()
+    # oldList.update_df()
 
-    df = pd.DataFrame(mangalist, columns=['ENG Title', 'JPN Title', 'Status', 'Current Chapter', 'Host', 'Manga Link', 'Kitsu Link', 'File'])
-    df = save_excel(df, "Manga List")
+    comparer = MangaComparer(newList, oldList)"""
+    menu_option()
 
-    print(df)
