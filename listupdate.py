@@ -6,6 +6,7 @@ from multiprocessing import Pool, Manager
 import datetime
 import os
 import logging
+from pprint import pprint
 
 class MangaListExtractor:
     def __init__(self, filename):
@@ -134,8 +135,7 @@ class MangaListExtractor:
         Functionality: This function is for writing a new json file with all the new opening filepath information as
         well as the old ones.
         """
-        date = str(datetime.datetime.now().date())
-        with open((filename + "-" + date), "w") as jsonFile:
+        with open(filename, "w") as jsonFile:
             jsonFile.seek(0)
             json.dump(self.mangaList, jsonFile, indent=4, ensure_ascii=False)
             jsonFile.truncate()
@@ -324,16 +324,12 @@ class Kitsu:
         return mangaList
 
     def find_dropped_manga(self, mangaList, referencefile):
-        if referencefile:
-            with open(referencefile) as ref_file:
-                ref_list = json.load(ref_file)
-
         self.get_current_library_entries()
-        not_found_manga = []
+        not_found_mangas = []
         for index, kitsu_manga in enumerate(self.KitsuMangaList):
             titles = list(filter(None, list(kitsu_manga["attributes"]["titles"].values())))
             if not any(manga["Kitsu ID"] == kitsu_manga["id"] for manga in mangaList):
-                not_found_manga.append({"Title": titles[0],
+                not_found_mangas.append({"Title": titles[0],
                                        "ID": kitsu_manga["id"],
                                         "Manga Type": kitsu_manga["attributes"]["mangaType"],
                                         "Ignore": False})
@@ -351,9 +347,18 @@ class Kitsu:
                 logging.debug("Manga Type: {}".format(kitsu_manga["attributes"]["mangaType"]))
                 logging.debug("==========================================================")
 
+        if referencefile:
+            logging.debug("Merging reference file with list of mangas not found...")
+            with open(referencefile) as ref_file:
+                ref_list = json.load(ref_file)
 
-        print("Number of not found manga from Kitsu in list: {}".format(len(not_found_manga)))
-        return not_found_manga
+            for ref_index, ref_manga in enumerate(ref_list):
+                for nf_index, nf_manga in enumerate(not_found_mangas):
+                    if ref_manga["ID"] == nf_manga["ID"]:
+                        nf_manga["Ignore"] = ref_manga["Ignore"]
+
+        print("Number of not found manga from Kitsu in list: {}".format(len(not_found_mangas)))
+        return not_found_mangas
 
     def write_to_json(self, filename, mangaList):
         """
@@ -361,8 +366,7 @@ class Kitsu:
         :param mangaList: This parameter requires the user to give a list of manga titles to append to our JSON file
         Functionality: This function is for creating/updating a JSON files with a list of dicts that was passed in.
         """
-        date = str(datetime.datetime.now().date())
-        with open((filename + "-" + date), "w") as jsonFile:
+        with open(filename, "w") as jsonFile:
             jsonFile.seek(0)
             json.dump(mangaList, jsonFile, indent=4, ensure_ascii=False)
             jsonFile.truncate()
@@ -372,7 +376,43 @@ class Kitsu:
         self.test = requests.get(something).json()
 
 
+def check_input(listofitems, user_input):
+    """
+    :param listofitems: A list containing whatever the user if want to retrieve something from.
+    :param user_input: The string of a user's input.
+    :return: An item from the list that was provided based on index or just the string itself.
+    Functionality: It will determine if the user entered an index or an actual string and return accordingly.
+    """
+    if user_input.isnumeric():
+        return listofitems[int(user_input)]
+    else:
+        return user_input
+
+
 def menu_option():
+    username = input("Please enter Kitsu username: ")
+    password = input("Please enter Kitsu password: ")
+    test_login = Kitsu(username, password) # Won't be using for anything besides testing if the username/password is valid
+    os.system("cls" if os.name == "nt" else "clear")
+    print("""
+    ********************************************************************************************************************
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ********************************************************************************************************************
+            __  ___                           __    _      __                                 
+           /  |/  /___ _____  ____ _____ _   / /   (_)____/ /_                                
+          / /|_/ / __ `/ __ \/ __ `/ __ `/  / /   / / ___/ __/                                
+         / /  / / /_/ / / / / /_/ / /_/ /  / /___/ (__  ) /_                                  
+        /_/  /_/\__,_/_/ /_/\__, /\__,_/  /_____/_/____/\__/                                  
+           __  __          //___/  __          ________     __                  __            
+          / / / /___  ____/ /___ _/ /____    _/_/ ____/  __/ /__________ ______/ /_____  _____
+         / / / / __ \/ __  / __ `/ __/ _ \ _/_// __/ | |/_/ __/ ___/ __ `/ ___/ __/ __ \/ ___/
+        / /_/ / /_/ / /_/ / /_/ / /_/  __//_/ / /____>  </ /_/ /  / /_/ / /__/ /_/ /_/ / /    
+        \____/ .___/\__,_/\__,_/\__/\___/_/  /_____/_/|_|\__/_/   \__,_/\___/\__/\____/_/     
+        /_/  
+    ********************************************************************************************************************
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ********************************************************************************************************************                                                                             
+         """)
     print("Welcome to the MangaStorm to Kitsu Updater/Exactor")
     while True:
         print("List Of Options")
@@ -381,7 +421,7 @@ def menu_option():
         print("2. Update Manga List with another existing Manga List")
         print("3. Attempt to find and update all manga id in JSON file")
         print("4. Find dropped series")
-        print("5. Manga ID finder")
+        print("5. Update Manga Information or Search for Manga IDs")
         print("6. Update Kitsu Website with dropped manga with JSON file")
         print("7. Update Kitsu Website with JSON File")
         print("8. Exit")
@@ -390,21 +430,25 @@ def menu_option():
         user_input = input("Please enter option: ")
 
         if user_input == "1":
+            files = []
             print("\nMSBF files")
             print("===================================================================================================")
             for file in os.listdir():
                 if file.endswith(".msbf"):
-                    print(file)
+                    print("{}. {}".format(str(len(files)), file))
+                    files.append(file)
             print("===================================================================================================")
-            msbffile = input("Please enter name of .msbf file to extract from: ")
+            msbffile = check_input(files, input("Please select option or enter name: "))
 
             mangaListExtraction = MangaListExtractor(msbffile)
             mangaListExtraction.get_manga_info()
-            filename = input("Please enter a name to save the file as (make sure to add .json at the end of filename): ")
-            mangaListExtraction.write_to_json(filename)
+
+            filename = input("Please enter a name to save the file as (do not add extension name like .json): ")
+            mangaListExtraction.write_to_json((filename + "-" + str(datetime.datetime.now().date()) + ".json"))
             print("\n")
 
         elif user_input == "2":
+            files = []
             print("\n*************************************************************************************************")
             print("Note: This option works by requiring the user to have a pre-existing JSON file that has Manga IDs")
             print("This will work by taking a old JSON file and taking all the IDs that it should already have and")
@@ -415,10 +459,11 @@ def menu_option():
             print("===================================================================================================")
             for file in os.listdir():
                 if file.endswith(".json"):
-                    print(file)
+                    print("{}. {}".format(str(len(files)), file))
+                    files.append(file)
             print("===================================================================================================")
-            newfile = input("Please enter name of new .json file to update: ")
-            oldfile = input("Please enter name of old .json file to with: ")
+            newfile = check_input(files, input("Please select option or enter name of new .json file to update: "))
+            oldfile = check_input(files, input("Please select option or enter name of old .json file to with: "))
 
             newList = MangaListExtractor(newfile)
             oldList = MangaListExtractor(oldfile)
@@ -427,17 +472,18 @@ def menu_option():
 
             newList.mangaList = comparer.newList.to_dict(orient="records")
             newList.write_to_json(newfile)
+            print("\n")
 
         elif user_input == "3":
+            files = []
             print("\nJSON Files")
             print("=====================================================================")
             for file in os.listdir():
                 if file.endswith(".json"):
-                    print(file)
+                    print("{}. {}".format(str(len(files)), file))
+                    files.append(file)
             print("=====================================================================")
-            jsonfile = input("Please enter name of .json file to update: ")
-            username = input("Please enter Kitsu username: ")
-            password = input("Please enter Kitsu password: ")
+            jsonfile = check_input(files, input("Please select option or enter name of .json file to update: "))
 
             jsonmangaList = MangaListExtractor(jsonfile)
             KitsuUpdater = Kitsu(username, password)
@@ -447,6 +493,7 @@ def menu_option():
             print("\n")
 
         elif user_input == "4":
+            files = []
             print("\n*************************************************************************************************")
             print("Note: This options is for compiling a list of Mangas that was found on Kitsu but not found in the")
             print("specified JSON fille. The use of this is to later update the Kitsu Website with series that was")
@@ -462,30 +509,113 @@ def menu_option():
             print("===================================================================================================")
             for file in os.listdir():
                 if file.endswith(".json"):
-                    print(file)
+                    print("{}. {}".format(str(len(files)), file))
+                    files.append(file)
             print("===================================================================================================")
-            jsonfile = input("Please enter name of new .json file to compare with mangas found on Kitsu: ")
-            username = input("Please enter Kitsu username: ")
-            password = input("Please enter Kitsu password: ")
-
+            jsonfile = check_input(files, input("Please select option or enter the name of new .json file to compare "
+                                                "with the mangas found on Kitsu: "))
             jsonmangaList = MangaListExtractor(jsonfile)
             KitsuUpdater = Kitsu(username, password)
 
             user_input = input("Would you like to use a previous not_found_manga*.json file as a reference? (Y/N): ")
             if user_input.lower() == "y" or user_input.lower() =="yes":
-                referencefile = input("Please enter name of not_found_manga*.json file to be used for reference: ")
+                referencefile = check_input(files, input("Please select option or enter name of not_found_manga*.json "
+                                                         "file to be used for reference: "))
                 mangaList = KitsuUpdater.find_dropped_manga(jsonmangaList.mangaList, referencefile)
             else:
                 mangaList = KitsuUpdater.find_dropped_manga(jsonmangaList.mangaList)
 
-
-            user_input = input("Would you like to save not found mangas in JSON file? (Y/N): ")
+            user_input = input("\nWould you like to save not found mangas in JSON file? (Y/N): ")
             if user_input.lower() == "y" or user_input.lower() =="yes":
-                KitsuUpdater.write_to_json("not_found_mangas.json", mangaList)
+                KitsuUpdater.write_to_json(("not_found_mangas" + "-" + str(datetime.datetime.now().date()) + ".json"),
+                                           mangaList)
 
             else:
-                print("Did not save results...")
-            print("\n")
+                print("Did not save results...\n")
+
+        elif user_input == "5":
+            files = []
+            os.system("cls" if os.name == "nt" else "clear")
+            print("\nJSON Files")
+            print("===================================================================================================")
+            for file in os.listdir():
+                if file.endswith(".json"):
+                    print("{}. {}".format(str(len(files)), file))
+                    files.append(file)
+            print("===================================================================================================")
+            jsonfile = check_input(files, input("Please select option or enter the name of new .json file "
+                                                "to find Manga IDs for: "))
+
+            jsonmangaList = MangaListExtractor(jsonfile)
+            KitsuUpdater = Kitsu(username, password)
+            noIDs = jsonmangaList.mangaDF.loc[jsonmangaList.mangaDF["Kitsu ID"].isna()]
+            print(noIDs)
+
+            while True:
+                print("List Of Options")
+                print("===================================================="
+                      "===================================================")
+                print("1. Look up Manga ID on Kitsu")
+                print("2. Manually Update Manga's Information")
+                print("3. Display Mangas without ID")
+                print("4. Display All Mangas")
+                print("5. Exit")
+                print("===================================================="
+                      "===================================================")
+
+                user_input = input("Please enter option: ")
+
+                if user_input == "1":
+                    print("Note: You can type in the index of the manga found in the list for the program to reference")
+                    print("or simply type the name of whatever manga you want to look up.")
+                    print("Note: Will only display up to 10 matches if you look up specific title on Kitsu")
+                    mangaTitle = check_input(jsonmangaList.mangaList, input("Please enter index number or name: "))
+                    print("\n")
+
+                    if isinstance(mangaTitle, dict):
+                        results = KitsuUpdater.manga_search(mangaTitle["Title"])
+                    else:
+                        results = KitsuUpdater.manga_search(mangaTitle)
+
+                    for result in results["data"]:
+                        titles = [title for title in (list(result["attributes"]["titles"].values()))
+                                  if title is not None]
+                        print("***************************************************************************************")
+                        print("Title: {}".format(titles[0]))
+                        print("Kitsu ID: {}".format(result["id"]))
+                        print("Manga Type: {}".format(result["attributes"]["mangaType"]))
+                        print("Synopsis: {}".format(result["attributes"]["synopsis"]))
+                        print("***************************************************************************************")
+                    print("\n")
+                elif user_input == "2":
+                    mangaInfo = int(input("Please enter index number of manga from list: "))
+                    mangaFields = ["Host", "Ignore", "Title", "Kitsu ID", "Manga Link", "Manga Type", "Status"]
+                    while True:
+                        pprint(jsonmangaList.mangaList[mangaInfo])
+                        field_input = input("Please enter which field you plan to update "
+                                            "(to update another manga type exit): ")
+                        if field_input.lower() == "exit":
+                            print("\n")
+                            break
+                        elif field_input not in mangaFields:
+                            print("Invalid Field")
+                        else:
+                            value_input = input("Please enter new value for field: ")
+                            if value_input == "True":
+                                jsonmangaList.mangaList[mangaInfo][field_input] = True
+                            elif value_input == "False":
+                                jsonmangaList.mangaList[mangaInfo][field_input] = False
+                            else:
+                                jsonmangaList.mangaList[mangaInfo][field_input] = value_input
+
+                elif user_input == "3":
+                    print(noIDs[["Title", "Kitsu ID"]])
+                elif user_input == "4":
+                    print(jsonmangaList.mangaDF[["Title, Kitsu ID"]])
+                elif user_input == "5":
+                    break
+                else:
+                    print("Invalid input")
 
         elif user_input == "8":
             break
@@ -494,7 +624,8 @@ def menu_option():
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
-    """newList = MangaListExtractor("something.json")
+    pd.set_option("display.max_rows", None)
+    newList = MangaListExtractor("something-2020-07-08.json")
     oldList = MangaListExtractor("something-old.json")
     newListKitsu = Kitsu("Kitsuneace", "Cookie100203")
     oldListKitsu = Kitsu("Kitsuneace", "Cookie100203")
@@ -510,6 +641,6 @@ if __name__ == '__main__':
     # newList.update_df()
     # oldList.update_df()
 
-    comparer = MangaComparer(newList, oldList)"""
-    menu_option()
+    comparer = MangaComparer(newList, oldList)
+    # menu_option()
 
