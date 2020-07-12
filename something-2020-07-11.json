@@ -148,8 +148,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/24249/a-story-about-treating-a-female-knight-who-has-never-been-treated-as-a-woman-as-a-woman",
         "Title": "A Story About Treating a Female Knight, Who Has Never Been Treated as a Woman, as a Woman",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "40811",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -229,8 +229,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/18221/amano-megumi-wa-suki-darake",
         "Title": "Amano Megumi wa Suki Darake!",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "37646",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -355,8 +355,8 @@
         "Status": "current",
         "Manga Link": "http://www.mangahere.cc/manga/avatar_the_last_airbender_the_search/?f=mobile",
         "Title": "Avatar: The Last Airbender – The Search",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "39311",
+        "Manga Type": "oel",
         "Ignore": false
     },
     {
@@ -384,7 +384,7 @@
         "Title": "Awkward Senpai (Webcomic)",
         "Kitsu ID": null,
         "Manga Type": null,
-        "Ignore": false
+        "Ignore": true
     },
     {
         "Host": "z13mangadex",
@@ -697,8 +697,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/23181/cigarette-and-cherry",
         "Title": "Cigarette and Cherry",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "40777",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -715,8 +715,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/44270/confessing-to-my-childhood-friend-whos-worried-shes-plain?utm_source=share&utm_medium=ios_app&utm_name=iossmf",
         "Title": "Confessing to my Childhood Friend who’s Worried she’s Plain",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "56071",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -742,8 +742,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/19600/danberu-nan-kiro-moteru",
         "Title": "Danberu nan kiro moteru?",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "38750",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -805,8 +805,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/31690/do-chokkyu-kareshi-kanojo",
         "Title": "Do Chokkyu Kareshi × Kanojo",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "52170",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -841,8 +841,8 @@
         "Status": "current",
         "Manga Link": "http://www.mangahere.cc/manga/dragon_ball_heroes_victory_mission/?f=mobile",
         "Title": "Dragon Ball Heroes - Victory Mission",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "23437",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -868,8 +868,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/9803/dungeon-ni-deai-o-motomeru-no-wa-machigatte-iru-darou-ka",
         "Title": "Dungeon ni Deai o Motomeru no wa Machigatte Iru Darou ka",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "17189",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -895,8 +895,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/20380/elf-san-wa-yaserarenai",
         "Title": "Elf-san wa Yaserarenai",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "38969",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -931,8 +931,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/45824/first-comes-love-then-comes-marriage?utm_source=share&utm_medium=ios_app&utm_name=iossmf",
         "Title": "First Comes Love, Then Comes Marriage",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "56729",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -1210,8 +1210,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/20686/hero-waltz-2-0",
         "Title": "Hero Waltz 2.0",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "38160",
+        "Manga Type": "manhwa",
         "Ignore": false
     },
     {
@@ -1219,8 +1219,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/23368/hero-i-quit-a-long-time-ago",
         "Title": "Hero? I Quit A Long Time Ago.",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "40878",
+        "Manga Type": "manhua",
         "Ignore": false
     },
     {
@@ -1336,8 +1336,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/19105/i-hate-love",
         "Title": "I Hate Love",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "40828",
+        "Manga Type": "manhwa",
         "Ignore": false
     },
     {
@@ -1354,8 +1354,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/33396/i-m-nearly-30-but-this-is-my-first-love",
         "Title": "I'm Nearly 30, but this is my First Love",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "54398",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -1363,8 +1363,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/44661/i-m-not-a-lolicon",
         "Title": "I'm Not a Lolicon!",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "55796",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -1408,8 +1408,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/19472/if-it-s-for-my-daughter-i-d-even-defeat-a-demon-lord",
         "Title": "If It’s for My Daughter, I’d Even Defeat a Demon Lord",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "38147",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -1417,8 +1417,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/38628/if-my-wife-became-an-elementary-school-student",
         "Title": "If My Wife Became an Elementary School Student",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "38147",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -1489,8 +1489,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/39447/is-it-odd-that-i-became-an-adventurer-even-if-i-graduated-from-the-witchcraft-institute",
         "Title": "Is It Odd That I Became An Adventurer Even If I Graduated From The Witchcraft Institute?",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "54929",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -1561,8 +1561,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/16454/jigokuren-death-life",
         "Title": "Jigokuren; Death Life",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "36028",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -1579,8 +1579,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/31002/jimi-na-kensei-wa-sore-demo-saikyou-desu",
         "Title": "Jimi na Kensei wa Sore Demo Saikyou desu",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "54067",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -1633,8 +1633,8 @@
         "Status": "current",
         "Manga Link": "http://m.mangatown.com/manga/kaguya_sama_wa_kokurasetai_tensai_tachi_no_renai_zunousen",
         "Title": "Kaguya-sama wa Kokurasetai - Tensai-tachi no Renai Zunousen",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "35896",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -1651,8 +1651,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/21758/kaifuku-jutsushi-no-yarinaoshi/chapters/",
         "Title": "Kaifuku Jutsushi no Yarinaoshi",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "40299",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -1921,8 +1921,8 @@
         "Status": "current",
         "Manga Link": "http://www.mangahere.cc/manga/koi_furu_colorful_zenbu_kimi_to_hajimete/?f=mobile",
         "Title": "Koi Furu Colorful - Zenbu Kimi to Hajimete",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "38698",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -1948,8 +1948,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/22542/koi-to-yobu-niwa-kimochi-warui",
         "Title": "Koi to Yobu Niwa Kimochi Warui",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "38009",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -1984,8 +1984,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/14153/konjiki-no-word-master-yuusha-yonin-ni-makikomareta-unique-cheat",
         "Title": "Konjiki no Word Master - Yuusha Yonin ni Makikomareta Unique Cheat",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "27533",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -2218,8 +2218,8 @@
         "Status": "current",
         "Manga Link": "https://kissmanga.com/Manga/Mijuku-na-Futari-de-Gozaimasu-ga",
         "Title": "Mijuku na Futari de Gozaimasu ga",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "53398",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -2272,8 +2272,8 @@
         "Status": "current",
         "Manga Link": "http://www.mangahere.cc/manga/monku_no_tsukeyou_ga_nai_rabukome/?f=mobile",
         "Title": "Monku no Tsukeyou ga Nai Rabukome",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "27177",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -2569,8 +2569,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/34639/oji-san-to-marshmallow",
         "Title": "Oji-san to Marshmallow",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "36082",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -2695,8 +2695,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/21161/ore-wo-suki-nano-wa-omae-dake-ka-yo",
         "Title": "Ore wo Suki Nano wa Omae Dake ka yo",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "39230",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -2848,8 +2848,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/14246/pok-mon-dating-a-team-magma-grunt-doujinshi",
         "Title": "Pokémon - Dating a Team Magma Grunt (Doujinshi)",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "36617",
+        "Manga Type": "doujin",
         "Ignore": false
     },
     {
@@ -2983,8 +2983,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/19204/rikei-ga-koi-ni-ochita-no-de-shoumeishitemita",
         "Title": "Rikei ga Koi ni Ochita no de Shoumeishitemita.",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "38032",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -3154,8 +3154,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/24153/senpai-kouhai",
         "Title": "Senpai×Kouhai",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "53139",
+        "Manga Type": "doujin",
         "Ignore": false
     },
     {
@@ -3181,8 +3181,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/32668/shed-ryugasaki-san",
         "Title": "Shed! Ryugasaki-san",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "54791",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -3298,8 +3298,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/38349/sokuochi-mayuri-chan-comicwalker-serialization",
         "Title": "Sokuochi Mayuri-chan - ComicWalker serialization",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "55870",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -3343,8 +3343,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/16838/soushi-souai",
         "Title": "Soushi Souai",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "39136",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -3406,8 +3406,8 @@
         "Status": "current",
         "Manga Link": "http://m.mangatown.com/manga/summer_time_render/",
         "Title": "Summer Time Render",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "40289",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -3424,8 +3424,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/19671/sword-art-online-project-alicization",
         "Title": "Sword Art Online - Project Alicization",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "38771",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -3433,8 +3433,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/19509/sword-art-online-alternative-gun-gale-online",
         "Title": "Sword Art Online Alternative - Gun Gale Online",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "36579",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -3505,8 +3505,8 @@
         "Status": "current",
         "Manga Link": "http://www.mangahere.cc/manga/tejina_senpai/?f=mobile",
         "Title": "Tejina Senpai",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "37359",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -3712,8 +3712,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/25264/the-story-of-an-onee-san-who-wants-to-keep-a-high-school-boy",
         "Title": "The Story of an Onee-San Who Wants to Keep a High School Boy.",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "40819",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -3802,8 +3802,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/30257/tonari-wa-nani-o-kuu-hito-zo-horoyoi",
         "Title": "Tonari wa Nani o Kuu Hito zo - Horoyoi",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "51833",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -3811,8 +3811,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/23439/tonikaku-cawaii",
         "Title": "Tonikaku Cawaii",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "40657",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -3946,8 +3946,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/32912/welcome-to-japan-elf-san",
         "Title": "Welcome to Japan, Elf-san!",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "54506",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -4009,8 +4009,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/19969/yakumo-san-wa-edzuke-ga-shitai",
         "Title": "Yakumo-san wa Edzuke ga Shitai",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "38684",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -4081,8 +4081,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/23661/yonakano-reiji-ni-haremu-wo",
         "Title": "Yonakano Reiji ni Haremu Wo!!",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "40831",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -4099,8 +4099,8 @@
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/311/yotsuba-to",
         "Title": "Yotsuba to!",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "272",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -4189,8 +4189,8 @@
         "Status": "completed",
         "Manga Link": "https://mangadex.org/title/20679/5toubun-no-hanayome",
         "Title": "5Toubun no Hanayome",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "39018",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -4225,8 +4225,8 @@
         "Status": "completed",
         "Manga Link": "https://mangadex.org/title/48128/a-story-about-a-creepy-girl-smile",
         "Title": "A Story About a Creepy Girl Smile",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "56622",
+        "Manga Type": "doujin",
         "Ignore": false
     },
     {
@@ -4261,8 +4261,8 @@
         "Status": "completed",
         "Manga Link": "https://mangadex.org/title/18889/a-answer",
         "Title": "A. - Answer",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "39149",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -4279,8 +4279,8 @@
         "Status": "completed",
         "Manga Link": "https://mangadex.org/title/42986/aijima-san-wa-samete-iru",
         "Title": "Aijima-san wa Samete Iru!",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "56771",
+        "Manga Type": "oneshot",
         "Ignore": false
     },
     {
@@ -4342,8 +4342,8 @@
         "Status": "completed",
         "Manga Link": "http://www.mangahere.cc/manga/ane_kurabe/?f=mobile",
         "Title": "Ane Kurabe",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "27377",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -4387,8 +4387,8 @@
         "Status": "completed",
         "Manga Link": "https://mangadex.org/title/22030/araburu-kisetsu-no-otomedomo-yo",
         "Title": "Araburu Kisetsu no Otomedomo yo.",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "46715",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -4405,8 +4405,8 @@
         "Status": "completed",
         "Manga Link": "http://www.mangahere.cc/manga/are_after_boyfriend/?f=mobile",
         "Title": "Are: After Boyfriend",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "4847",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -4459,8 +4459,8 @@
         "Status": "completed",
         "Manga Link": "https://mangadex.org/title/16279/ashitaba-san-chi-no-muko-kurashi",
         "Title": "Ashitaba-san Chi no Muko Kurashi",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "36827",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -4630,8 +4630,8 @@
         "Status": "completed",
         "Manga Link": "http://www.mangahere.cc/manga/boku_dake_ga_inai_machi_gaiden/?f=mobile",
         "Title": "Boku dake ga Inai Machi Gaiden",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "37234",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
@@ -4684,8 +4684,8 @@
         "Status": "completed",
         "Manga Link": "https://mangadex.org/title/24121/boku-no-kanojo-wa-saikoudesu",
         "Title": "Boku no Kanojo wa Saikoudesu!",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "40942",
+        "Manga Type": "manga",
         "Ignore": false
     },
     {
