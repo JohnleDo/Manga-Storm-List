@@ -2,6 +2,9 @@
 # TODO: Fix lines where it exceeds the character limit
 # TODO: Have better naming scheme
 # TODO: Use list comphrension for for loops
+# TODO: Added a new field called check date, go through code and fix print statements to include this new field
+# TODO: Make use of the check date field in the manga No ID searching interface, it will be used for easier
+#  identification of series that have been already searched.
 import pandas as pd
 import re
 import json
@@ -112,6 +115,16 @@ class MangaListExtractor:
             manga["Kitsu ID"] = None
             manga["Manga Type"] = None
             manga["Ignore"] = False
+            manga["Checked Date"] = None
+
+    def update_with_new_fields(self, new_field):
+        """
+
+        :return:
+        """
+        for manga in self.mangaList:
+            if new_field not in manga:
+                manga[new_field] = None
 
     def get_manga_info(self):
         """
@@ -151,14 +164,16 @@ class MangaComparer:
         self.newList = newMangaList.mangaDF
         self.newList = self.newList.merge(self.oldList, how="left", on=["Title"]).drop(["Kitsu ID_x", "Ignore_x",
                                                                                         "Host_y", "Status_y",
-                                                                                        "Manga Link_y", "Manga Type_x"],
+                                                                                        "Manga Link_y", "Manga Type_x",
+                                                                                        "Checked Date_x"],
                                                                                        axis=1)
         self.newList = self.newList.rename(index=str, columns={"Host_x": "Host",
                                                                "Status_x": "Status",
                                                                "Manga Link_x": "Manga Link",
                                                                "Kitsu ID_y": "Kitsu ID",
                                                                "Manga Type_y": "Manga Type",
-                                                               "Ignore_y": "Ignore"})
+                                                               "Ignore_y": "Ignore",
+                                                               "Checked Date_y": "Checked Date"})
         self.newList = self.newList.where(pd.notnull(self.newList), None)
         self.newList["Ignore"].fillna(value=False, inplace=True)
 
@@ -557,7 +572,8 @@ def menu_option():
             jsonmangaList = MangaListExtractor(jsonfile)
             jsonmangaListBackUp = MangaListExtractor(jsonfile)
             KitsuUpdater = Kitsu(username, password)
-            noIDs = jsonmangaList.mangaDF.loc[jsonmangaList.mangaDF["Kitsu ID"].isna()]
+            noIDs = jsonmangaList.mangaDF.loc[(jsonmangaList.mangaDF["Kitsu ID"].isna()) &
+                                              (jsonmangaList.mangaDF["Kitsu ID"].isna())]
             print(noIDs)
 
             while True:
@@ -646,12 +662,19 @@ def menu_option():
                                 jsonmangaList.mangaList[mangaInfo][field_input] = value_input
                 elif user_input == "3":
                     go_back = False
-                    mangaCounter = 1
-                    for index in noIDs.index:
+                    title_search = False
+                    new_title = None
+                    mangaCounter = 0
+                    while mangaCounter < len(noIDs.index):
+                        index = noIDs.index[mangaCounter]
                         if go_back is True:
                             print("Returning back to previous menu...\n")
                             break
-                        results = KitsuUpdater.manga_search(jsonmangaList.mangaList[index]["Title"])
+                        if title_search is True:
+                            results = KitsuUpdater.manga_search(new_title)
+                            title_search = False
+                        else:
+                            results = KitsuUpdater.manga_search(jsonmangaList.mangaList[index]["Title"])
 
                         os.system("cls" if os.name == "nt" else "clear")
                         print("***************************************************************************************")
@@ -693,11 +716,15 @@ def menu_option():
                         while True:
                             print("What would you like to do?\n"
                                   "1. Update with one of the results from above\n"
-                                  "2. Reset current manga back to original settings \n"
-                                  "3. Proceed to next manga with no ID\n"
-                                  "4. Save all changes\n"
-                                  "5. Discard all changes \n"
-                                  "6. Exit back to previous menu option\n")
+                                  "2. Proceed to next manga with no ID\n"
+                                  "3. Search manga with different title\n"
+                                  "4. Reset current manga back to original settings\n"
+                                  "5. Mark manga as ignore \n"
+                                  "6. Go to different index number of manga counter\n"
+                                  "7. Save all changes\n"
+                                  "8. Discard all changes \n"
+                                  "9. Exit back to previous menu option\n"
+                                  "10. Exit to main menu\n")
                             print("---------------------------------------------------------------------------------------")
                             user_input = input("Please enter option: ")
 
@@ -715,10 +742,13 @@ def menu_option():
                                                   "Manga Result that you picked\n"
                                                   "=========================================="
                                                   "=============================================\n")
+                                            titles = [title for title in
+                                                      (list(results["data"][int(user_input)]["attributes"]["titles"].values()))
+                                                      if title is not None]
                                             print("Titles: {}".format(", ".join(titles)))
-                                            print("Kitsu ID: {}".format(result["id"]))
-                                            print("Manga Type: {}".format(result["attributes"]["mangaType"]))
-                                            print("Synopsis: {}".format(result["attributes"]["synopsis"]))
+                                            print("Kitsu ID: {}".format(results["data"][int(user_input)]["id"]))
+                                            print("Manga Type: {}".format(results["data"][int(user_input)]["attributes"]["mangaType"]))
+                                            print("Synopsis: {}".format(results["data"][int(user_input)]["attributes"]["synopsis"]))
                                             print("======================================"
                                                   "=================================================\n"
                                                   "Manga Field Update\n"
@@ -748,6 +778,13 @@ def menu_option():
                                         print("The option you provided was not a number corresponding to the option, "
                                               "please try again.")
                             elif user_input == "2":
+                                mangaCounter = mangaCounter + 1
+                                break
+                            elif user_input == "3":
+                                new_title = input("Enter a different title to search for: ")
+                                title_search = True
+                                break
+                            elif user_input == "4":
                                 jsonmangaList.mangaList[index]["Kitsu ID"] = None
                                 jsonmangaList.mangaList[index]["Manga Type"] = None
                                 print(
@@ -769,23 +806,60 @@ def menu_option():
                                 print(
                                     "==========================================="
                                     "============================================")
-                            elif user_input == "3":
-                                mangaCounter = mangaCounter + 1
+                            elif user_input == "5":
+                                jsonmangaList.mangaList[index]["Ignore"] = True
+                                print(
+                                    "==========================================="
+                                    "============================================")
+                                print("Manga Updated to be ignored")
+                                print("Host: {}\n"
+                                      "Ignore: {}\n"
+                                      "Kitsu ID: {}\n"
+                                      "Manga Link: {}\n"
+                                      "Manga Type: {}\n"
+                                      "Status: {}\n"
+                                      "Title: {}".format(jsonmangaList.mangaList[index]["Host"],
+                                                         jsonmangaList.mangaList[index]["Ignore"],
+                                                         jsonmangaList.mangaList[index]["Kitsu ID"],
+                                                         jsonmangaList.mangaList[index]["Manga Link"],
+                                                         jsonmangaList.mangaList[index]["Manga Type"],
+                                                         jsonmangaList.mangaList[index]["Status"],
+                                                         jsonmangaList.mangaList[index]["Title"]))
+                                print(
+                                    "==========================================="
+                                    "============================================")
+                            elif user_input == "6":
+                                while True:
+                                    index_input = input("What index number do you want to jump to?: ")
+                                    if index_input.isnumeric():
+                                        if int(index_input) < len(noIDs.index):
+                                            mangaCounter = int(index_input)
+                                            break
+                                        else:
+                                            print("Index you entered was greater "
+                                                  "than the highest manga count: {},"
+                                                  "please try again.".format(len(noIDs.index)))
+                                    else:
+                                        print("Input you entered was not an integer, please try again.")
                                 break
-                            elif user_input == "4":
+                            elif user_input == "7":
                                 print("==========================================="
                                       "============================================")
                                 jsonmangaList.write_to_json(jsonfile)
                                 print("==========================================="
                                       "============================================")
-                            elif user_input == "5":
+                            elif user_input == "8":
                                 print("==========================================="
                                       "============================================")
                                 jsonmangaListBackUp.write_to_json(jsonfile)
                                 print("==========================================="
                                       "============================================")
-                            elif user_input == "6":
-                                go_back = True
+                            elif user_input == "9" or user_input == "10":
+                                if user_input == "10":
+                                    go_back = True
+                                else:
+                                    # TODO: Add a way to go back to main menu
+                                    print("Needs to be added")
                                 user_input = input("Would you like to save any unsaved changes? (Y/N): ")
                                 if user_input.lower() == "y" or user_input.lower() == "yes":
                                     jsonmangaList.write_to_json(jsonfile)
@@ -837,10 +911,14 @@ def menu_option():
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     pd.set_option("display.max_rows", None)
-    newList = MangaListExtractor("something-2020-07-08.json")
+    newList = MangaListExtractor("something-2020-07-11.json")
     oldList = MangaListExtractor("something-old.json")
     newListKitsu = Kitsu("Kitsuneace", "Cookie100203")
     oldListKitsu = Kitsu("Kitsuneace", "Cookie100203")
+    # newList.update_with_new_fields("Checked Date")
+    # newList.update_df()
+    # oldList.update_with_new_fields("Checked Date")
+    # oldList.update_df()
 
     # newList.get_manga_info()
     # oldList.get_manga_info()
