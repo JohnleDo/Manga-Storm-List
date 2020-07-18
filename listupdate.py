@@ -5,6 +5,7 @@
 # TODO: Added a new field called check date, go through code and fix print statements to include this new field
 # TODO: Make use of the check date field in the manga No ID searching interface, it will be used for easier
 #  identification of series that have been already searched.
+# TODO: Deal with mangas with duplicate IDs like Hero Waltz and Hero Waltz 2.0. Both are listed under the same Kitsu ID
 import pandas as pd
 import re
 import json
@@ -145,6 +146,14 @@ class MangaListExtractor:
         """
         self.mangaDF = pd.DataFrame(self.mangaList)
 
+    def drop_duplicates(self):
+        """
+        Functionality: Drops duplicates from both mangaList and mangaDF.
+        """
+        self.mangaDF = pd.DataFrame(self.mangaList)
+        self.mangaDF.drop_duplicates(keep="first", inplace=True)
+        self.mangaList = self.mangaDF.to_dict(orient="records")
+
     def write_to_json(self, filename):
         """
         :param filename: This parameter requires the user to give a name for the file to be created/updated
@@ -208,9 +217,10 @@ class Kitsu:
         jsonInfo = requests.post(self.url + getTokenurl).json()
         self.access_token = jsonInfo["access_token"]
         self.token_type = jsonInfo["token_type"]
-        self.header = {"Authorization": self.token_type + ' ' + self.access_token}
+        self.header = {"Authorization": self.token_type + ' ' + self.access_token, "Content-Type": "application/vnd.api+json"}
         self.user_id = requests.get(self.url + "/edge/users?filter[self]=true",
                                     headers=self.header).json()["data"][0]["id"]
+        self.errors = []
 
     def get_current_library_entries(self):
         """
@@ -378,6 +388,85 @@ class Kitsu:
         print("Number of not found manga from Kitsu in list: {}".format(len(not_found_mangas)))
         return not_found_mangas
 
+    # TODO: Implement multiprocessing
+    # TODO: Add a counter in the print statement
+    def update_kitsu_library(self, mangaList):
+        post_data = {
+            'data': {
+                'type': 'library-entries',
+                'attributes': {
+                    'status': None
+                },
+                'relationships': {
+                    'user': {
+                        'data': {
+                            'type': 'users',
+                            'id': self.user_id
+                        }
+                    },
+                    'manga': {
+                        'data': {
+                            'type': 'manga',
+                            'id': None
+                        }
+                    }
+                }
+            }
+        }
+        patch_data = {
+            "data": {
+                "type": "libraryEntries",
+                "id": None,
+                "attributes": {
+                    "status": None
+                }
+            }
+        }
+
+        for manga in mangaList:
+            if manga["Kitsu ID"] is not None:
+                geturl = "https://kitsu.io/api/edge/library-entries?filter[user_id]={}&filter[manga_id]={}" \
+                         "".format(self.user_id, manga["Kitsu ID"])
+                jsonInfo = requests.get(geturl, headers=self.header).json()
+
+                if not jsonInfo["data"]:
+                    posturl = "https://kitsu.io/api/edge/library-entries"
+                    post_data["data"]["attributes"]["status"] = manga["Status"]
+                    post_data["data"]["relationships"]["manga"]["data"]["id"] = manga["Kitsu ID"]
+                    response = requests.post(posturl, json=post_data, headers=self.header)
+                    statusCode = response.status_code
+
+                    if 200 <= statusCode < 300:
+                        print("{} was updated on Kitsu. Status Code: {}".format(manga["Title"], statusCode))
+                    else:
+                        print("{} was not updated. Error code: {}".format(manga["Title"], statusCode))
+                        self.errors.append({"Manga Title": manga["Title"],
+                                            "Kitsu ID": manga["Kitsu ID"],
+                                            "Status Code": response.status_code,
+                                            "Response": response})
+                else:
+                    if jsonInfo["data"][0]["attributes"]["status"] != manga["Status"]:
+                        libray_entry_id = jsonInfo["data"][0]["id"]
+                        patchurl = "https://kitsu.io/api/edge/library-entries/{}".format(libray_entry_id)
+                        patch_data["data"]["id"] = libray_entry_id
+                        patch_data["data"]["attributes"]["status"] = manga["Status"]
+                        response = requests.patch(patchurl, json=patch_data, headers=self.header)
+                        statusCode = response.status_code
+
+                        if 200 <= statusCode < 300:
+                            print("{} was updated on Kitsu. Status Code: {}".format(manga["Title"], statusCode))
+                        else:
+                            print("{} was not updated. Error code: {}".format(manga["Title"], statusCode))
+                            self.errors.append({"Manga Title": manga["Title"],
+                                                "Kitsu ID": manga["Kitsu ID"],
+                                                "Status Code": response.status_code,
+                                                "Response": response})
+                    else:
+                        print("{} was not updated. No new status update".format(manga["Title"]))
+            else:
+                print("{} was not updated. No Kitsu ID".format(manga["Title"]))
+
+
     def write_to_json(self, filename, mangaList):
         """
         :param filename: This parameter requires the user to give a name for the file to be created/updated
@@ -390,8 +479,22 @@ class Kitsu:
             jsonFile.truncate()
             print(filename + " has been updated/created.")
 
-    def request_test(self, something):
-        self.test = requests.get(something).json()
+    def test_request_put(self, url, data):
+        self.test = requests.put(url, json=data, headers=self.header)
+
+    def test_request_patch(self, url, data):
+        self.test = requests.patch(url, json=data, headers=self.header)
+
+    def test_request_get(self, url):
+        self.test = requests.get(url, headers=self.header)
+
+    def test_request_post(self, url, data):
+        self.test = requests.post(url, json=data, headers=self.header)
+
+
+class DebuggingTool:
+    def __init__(self):
+        self.KitsuErrors = []
 
 
 def check_input(listofitems, user_input):
@@ -407,7 +510,7 @@ def check_input(listofitems, user_input):
         return user_input
 
 
-def menu_option():
+def menu_option(DebuggingTool):
     username = input("Please enter Kitsu username: ")
     password = input("Please enter Kitsu password: ")
     test_login = Kitsu(username, password) # Won't be using for anything besides testing if the username/password is valid
@@ -927,17 +1030,37 @@ def menu_option():
                 else:
                     print("Invalid input")
 
+        elif user_input == "7":
+            files = []
+            print("\nJSON Files")
+            print("===================================================================================================")
+            filesInDir = os.listdir()
+            filesInDir.sort()
+            for file in filesInDir:
+                if file.endswith(".json"):
+                    print("{}. {}".format(str(len(files)), file))
+                    files.append(file)
+            print("===================================================================================================")
+            jsonfile = check_input(files, input("Please select option or enter the name of new .json file "
+                                                "to be used for updating the Kitsu website with: "))
+            jsonmangaList = MangaListExtractor(jsonfile)
+            KitsuUpdater = Kitsu(username, password)
+            KitsuUpdater.update_kitsu_library(jsonmangaList.mangaList)
+            DebuggingTool.KitsuErrors = KitsuUpdater.errors
+
         elif user_input == "8":
             print("Exitting...\n")
             break
         else:
             print("Invalid input\n")
 
+
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
+    DebuggingTool = DebuggingTool()
     pd.set_option("display.max_rows", None)
-    newList = MangaListExtractor("something-2020-07-11.json")
-    oldList = MangaListExtractor("something-old.json")
+    newList = MangaListExtractor("mangalist-2020-07-11.json")
+    oldList = MangaListExtractor("mangalist-2020-06-11.json")
     newListKitsu = Kitsu("Kitsuneace", "Cookie100203")
     oldListKitsu = Kitsu("Kitsuneace", "Cookie100203")
     # newList.update_with_new_fields("Checked Date")
@@ -958,4 +1081,5 @@ if __name__ == '__main__':
 
     comparer = MangaComparer(newList, oldList)
     # menu_option()
+    # "https://kitsu.io/api/edge/library-entries?filter[user_id]=15269&filter[manga_id]=41024"
 

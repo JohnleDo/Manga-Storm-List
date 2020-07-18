@@ -590,36 +590,6 @@
         "Checked Date": null
     },
     {
-        "Host": "z03mangahere",
-        "Status": "current",
-        "Manga Link": "http://www.mangahere.cc/manga/bokutachi_wa_benkyou_ga_dekinai/?f=mobile",
-        "Title": "Bokutachi wa Benkyou ga Dekinai",
-        "Kitsu ID": "38867",
-        "Manga Type": "manga",
-        "Ignore": false,
-        "Checked Date": null
-    },
-    {
-        "Host": "z03mangahere",
-        "Status": "current",
-        "Manga Link": "http://www.mangahere.cc/manga/bokutachi_wa_benkyou_ga_dekinai/?f=mobile",
-        "Title": "Bokutachi wa Benkyou ga Dekinai",
-        "Kitsu ID": "38867",
-        "Manga Type": "manga",
-        "Ignore": false,
-        "Checked Date": null
-    },
-    {
-        "Host": "z03mangahere",
-        "Status": "current",
-        "Manga Link": "http://www.mangahere.cc/manga/bokutachi_wa_benkyou_ga_dekinai/?f=mobile",
-        "Title": "Bokutachi wa Benkyou ga Dekinai",
-        "Kitsu ID": "38867",
-        "Manga Type": "manga",
-        "Ignore": false,
-        "Checked Date": null
-    },
-    {
         "Host": "z09mangatown",
         "Status": "current",
         "Manga Link": "http://m.mangatown.com/manga/boruto_naruto_next_generations",
@@ -1203,26 +1173,6 @@
         "Host": "z06kissmanga",
         "Status": "current",
         "Manga Link": "https://kissmanga.com/Manga/Grand-Blue",
-        "Title": "Grand Blue",
-        "Kitsu ID": "30463",
-        "Manga Type": "manga",
-        "Ignore": false,
-        "Checked Date": null
-    },
-    {
-        "Host": "z06kissmanga",
-        "Status": "current",
-        "Manga Link": "https://kissmanga.com/Manga/Grand-Blue",
-        "Title": "Grand Blue",
-        "Kitsu ID": "30463",
-        "Manga Type": "manga",
-        "Ignore": false,
-        "Checked Date": null
-    },
-    {
-        "Host": "z13mangadex",
-        "Status": "current",
-        "Manga Link": "https://mangadex.org/title/16313/grand-blue",
         "Title": "Grand Blue",
         "Kitsu ID": "30463",
         "Manga Type": "manga",
@@ -2050,16 +2000,6 @@
         "Checked Date": null
     },
     {
-        "Host": "z09mangatown",
-        "Status": "current",
-        "Manga Link": "http://m.mangatown.com/manga/kimi_no_iru_machi",
-        "Title": "Kimi no Iru Machi",
-        "Kitsu ID": "17209",
-        "Manga Type": "manga",
-        "Ignore": false,
-        "Checked Date": null
-    },
-    {
         "Host": "z13mangadex",
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/37498/kimi-wa-houkago-insomnia",
@@ -2790,26 +2730,6 @@
         "Checked Date": "2020-07-16"
     },
     {
-        "Host": "z06kissmanga",
-        "Status": "current",
-        "Manga Link": "https://kissmanga.com/Manga/Not-so-honest-Kouhai",
-        "Title": "Not-so-honest Kouhai",
-        "Kitsu ID": null,
-        "Manga Type": null,
-        "Ignore": false,
-        "Checked Date": "2020-07-16"
-    },
-    {
-        "Host": "z13mangadex",
-        "Status": "current",
-        "Manga Link": "https://mangadex.org/title/30966/not-so-honest-kouhai",
-        "Title": "Not-so-honest Kouhai",
-        "Kitsu ID": null,
-        "Manga Type": null,
-        "Ignore": false,
-        "Checked Date": "2020-07-16"
-    },
-    {
         "Host": "z13mangadex",
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/30966/not-so-honest-kouhai",
@@ -3093,26 +3013,6 @@
         "Host": "z06kissmanga",
         "Status": "current",
         "Manga Link": "https://kissmanga.com/Manga/Peerless-Dad",
-        "Title": "Peerless Dad",
-        "Kitsu ID": "54082",
-        "Manga Type": "manhwa",
-        "Ignore": false,
-        "Checked Date": null
-    },
-    {
-        "Host": "z06kissmanga",
-        "Status": "current",
-        "Manga Link": "https://kissmanga.com/Manga/Peerless-Dad",
-        "Title": "Peerless Dad",
-        "Kitsu ID": "54082",
-        "Manga Type": "manhwa",
-        "Ignore": false,
-        "Checked Date": null
-    },
-    {
-        "Host": "z13mangadex",
-        "Status": "current",
-        "Manga Link": "https://mangadex.org/title/29130/peerless-dad",
         "Title": "Peerless Dad",
         "Kitsu ID": "54082",
         "Manga Type": "manhwa",
@@ -6344,7 +6244,7 @@
         "Status": "completed",
         "Manga Link": "https://mangadex.org/title/12686/hime-sama-tanuki-no-koizanyou",
         "Title": "Hime-sama Tanuki no Koizanyou",
-        "Kitsu ID": "263360",
+        "Kitsu ID": "52540",
         "Manga Type": "manga",
         "Ignore": false,
         "Checked Date": null
@@ -6995,16 +6895,6 @@
         "Manga Link": "http://m.mangatown.com/manga/kimi_ni_todoke/?fb_comment_id=671977999523195_927835957270730",
         "Title": "Kimi ni Todoke",
         "Kitsu ID": "7375",
-        "Manga Type": "manga",
-        "Ignore": false,
-        "Checked Date": null
-    },
-    {
-        "Host": "z03mangahere",
-        "Status": "completed",
-        "Manga Link": "http://www.mangahere.cc/manga/kimi_no_iru_machi/?f=mobile",
-        "Title": "Kimi no Iru Machi",
-        "Kitsu ID": "17209",
         "Manga Type": "manga",
         "Ignore": false,
         "Checked Date": null
