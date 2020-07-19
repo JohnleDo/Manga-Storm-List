@@ -1,0 +1,344 @@
+[
+    {
+        "Title": "360° Material",
+        "ID": "13641",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "\"Aoi\" Hikaru ga Chikyuu ni Ita Koro......",
+        "ID": "4182",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Real Girl",
+        "ID": "8561",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Arachnid",
+        "ID": "10472",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Cross Manage",
+        "ID": "21401",
+        "Manga Type": "oneshot",
+        "Ignore": true
+    },
+    {
+        "Title": "Fairy Tail: Houou no Miko - Hajimari no Asa",
+        "ID": "13437",
+        "Manga Type": "oneshot",
+        "Ignore": true
+    },
+    {
+        "Title": "Naruto",
+        "ID": "13786",
+        "Manga Type": "oneshot",
+        "Ignore": true
+    },
+    {
+        "Title": "A Silent Voice",
+        "ID": "6157",
+        "Manga Type": "oneshot",
+        "Ignore": true
+    },
+    {
+        "Title": "Hana-kun to Koisuru Watashi",
+        "ID": "20453",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Fairy Tail x Rave",
+        "ID": "18765",
+        "Manga Type": "oneshot",
+        "Ignore": true
+    },
+    {
+        "Title": "Fairy Tail x Nanatsu no Taizai Christmas Special",
+        "ID": "25251",
+        "Manga Type": "oneshot",
+        "Ignore": true
+    },
+    {
+        "Title": "Road to Ninja: Naruto the Movie",
+        "ID": "20349",
+        "Manga Type": "oneshot",
+        "Ignore": true
+    },
+    {
+        "Title": "GE: Good Ending",
+        "ID": "8329",
+        "Manga Type": "oneshot",
+        "Ignore": true
+    },
+    {
+        "Title": "Haikyuu!!",
+        "ID": "1873",
+        "Manga Type": "oneshot",
+        "Ignore": true
+    },
+    {
+        "Title": "Nisekyuu!!",
+        "ID": "3896",
+        "Manga Type": "oneshot",
+        "Ignore": true
+    },
+    {
+        "Title": "No Longer Heroine",
+        "ID": "14854",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Iris Zero",
+        "ID": "12718",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Kaichou-kun no Shimobe",
+        "ID": "4994",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Magical Girl Apocalypse",
+        "ID": "19998",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Kurogane (2010)",
+        "ID": "22107",
+        "Manga Type": "oneshot",
+        "Ignore": true
+    },
+    {
+        "Title": "Liar Game",
+        "ID": "3516",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Medaka Box",
+        "ID": "321",
+        "Manga Type": "oneshot",
+        "Ignore": true
+    },
+    {
+        "Title": "King's Game: Extreme",
+        "ID": "4436",
+        "Manga Type": "manga",
+        "Ignore": true
+    },
+    {
+        "Title": "Liar x Liar",
+        "ID": "17286",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Namida Usagi: Seifuku no Kataomoi",
+        "ID": "5739",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Papa no Iukoto wo Kikinasai!: Miu-sama no Iutoori",
+        "ID": "22228",
+        "Manga Type": "manga",
+        "Ignore": true
+    },
+    {
+        "Title": "Papa no Iukoto wo Kikinasai!: Rojou Kansatsu Kenkyuu Nisshi",
+        "ID": "6687",
+        "Manga Type": "manga",
+        "Ignore": true
+    },
+    {
+        "Title": "Servamp",
+        "ID": "23704",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Soul Catcher(S)",
+        "ID": "9886",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Yowamushi Pedal",
+        "ID": "15349",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Twin Star Exorcists",
+        "ID": "25291",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Switch Girl!!",
+        "ID": "3837",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Arpeggio of Blue Steel",
+        "ID": "19201",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "The Ancient Magus' Bride",
+        "ID": "25356",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Freezing",
+        "ID": "12946",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Namaikizakari.",
+        "ID": "25496",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Spirit Circle",
+        "ID": "17063",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Death Note Tokubetsu-hen",
+        "ID": "10473",
+        "Manga Type": "oneshot",
+        "Ignore": true
+    },
+    {
+        "Title": "Tokyo Ghoul",
+        "ID": "26819",
+        "Manga Type": "oneshot",
+        "Ignore": true
+    },
+    {
+        "Title": "Koi no Kamisama",
+        "ID": "25986",
+        "Manga Type": "manga",
+        "Ignore": true
+    },
+    {
+        "Title": "DICE: The Cube that Changes Everything",
+        "ID": "35879",
+        "Manga Type": "manhwa",
+        "Ignore": false
+    },
+    {
+        "Title": "Inari Konkon",
+        "ID": "15463",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Nisekoi Prototype",
+        "ID": "16319",
+        "Manga Type": "oneshot",
+        "Ignore": true
+    },
+    {
+        "Title": "Attack on Titan Volume 0",
+        "ID": "25293",
+        "Manga Type": "oneshot",
+        "Ignore": true
+    },
+    {
+        "Title": "Berserk Prototype",
+        "ID": "13737",
+        "Manga Type": "oneshot",
+        "Ignore": true
+    },
+    {
+        "Title": "Cross Epoch",
+        "ID": "1919",
+        "Manga Type": "oneshot",
+        "Ignore": true
+    },
+    {
+        "Title": "World Customize Creator",
+        "ID": "25378",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Crepuscule",
+        "ID": "1571",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "Ore Koi!!",
+        "ID": "25297",
+        "Manga Type": "manga",
+        "Ignore": true
+    },
+    {
+        "Title": "Fairy Tail+",
+        "ID": "26002",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "As the Gods Will",
+        "ID": "16994",
+        "Manga Type": "manga",
+        "Ignore": false
+    },
+    {
+        "Title": "The Irregular at Magic High School: Nine Schools Competition Arc",
+        "ID": "25306",
+        "Manga Type": "manga",
+        "Ignore": true
+    },
+    {
+        "Title": "The Irregular at Magic High School: Reminiscence Arc",
+        "ID": "25433",
+        "Manga Type": "manga",
+        "Ignore": true
+    },
+    {
+        "Title": "The Irregular at Magic High School: Yokohama Disturbance Arc",
+        "ID": "25980",
+        "Manga Type": "manga",
+        "Ignore": true
+    },
+    {
+        "Title": "Mahouka Koukou no Rettousei: Raihousha-hen",
+        "ID": "36698",
+        "Manga Type": "manga",
+        "Ignore": true
+    },
+    {
+        "Title": "Papa no Iukoto wo Kikinasai!: Sorairo no Hibiki",
+        "ID": "5025",
+        "Manga Type": "manga",
+        "Ignore": true
+    },
+    {
+        "Title": "Papa no Iukoto wo Kikinasai!: Takanashi no Hidamari",
+        "ID": "22223",
+        "Manga Type": "manga",
+        "Ignore": true
+    }
+]
