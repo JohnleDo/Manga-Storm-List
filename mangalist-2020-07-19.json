@@ -77,7 +77,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -97,17 +97,17 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/48730/a-manga-about-a-village-of-super-ultra-ultimately-cute-elves-burning-down",
         "Title": "A Manga About A Village of Super-Ultra-Ultimately Cute Elves Burning Down",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "56768",
+        "Manga Type": "manga",
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": null
     },
     {
         "Host": "z13mangadex",
@@ -127,7 +127,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -137,7 +137,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -177,7 +177,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -267,7 +267,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -387,7 +387,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z03mangahere",
@@ -407,7 +407,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -427,7 +427,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": true,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -647,7 +647,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z06kissmanga",
@@ -673,6 +673,16 @@
         "Host": "z03mangahere",
         "Status": "current",
         "Manga Link": "http://www.mangahere.cc/manga/chi_no_wadachi/?f=mobile",
+        "Title": "Chi no Wadachi",
+        "Kitsu ID": "38859",
+        "Manga Type": "manga",
+        "Ignore": false,
+        "Checked Date": null
+    },
+    {
+        "Host": "z13mangadex",
+        "Status": "current",
+        "Manga Link": "https://mangadex.org/title/20879/chi-no-wadachi",
         "Title": "Chi no Wadachi",
         "Kitsu ID": "38859",
         "Manga Type": "manga",
@@ -772,12 +782,22 @@
     {
         "Host": "z13mangadex",
         "Status": "current",
+        "Manga Link": "https://mangadex.org/title/51162/confession-series",
+        "Title": "Confession Series",
+        "Kitsu ID": null,
+        "Manga Type": null,
+        "Ignore": false,
+        "Checked Date": "2020-07-19"
+    },
+    {
+        "Host": "z13mangadex",
+        "Status": "current",
         "Manga Link": "https://mangadex.org/title/36833/convenient-persons",
         "Title": "Convenient Persons",
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -857,7 +877,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -927,7 +947,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -1017,7 +1037,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -1227,7 +1247,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -1287,17 +1307,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
-    },
-    {
-        "Host": "z13mangadex",
-        "Status": "current",
-        "Manga Link": "https://mangadex.org/title/20686/hero-waltz-2-0",
-        "Title": "Hero Waltz 2.0",
-        "Kitsu ID": "38160",
-        "Manga Type": "manhwa",
-        "Ignore": false,
-        "Checked Date": null
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -1306,16 +1316,6 @@
         "Title": "Hero? I Quit A Long Time Ago.",
         "Kitsu ID": "40878",
         "Manga Type": "manhua",
-        "Ignore": false,
-        "Checked Date": null
-    },
-    {
-        "Host": "z13mangadex",
-        "Status": "current",
-        "Manga Link": "https://mangadex.org/title/7950/hinamatsuri",
-        "Title": "Hinamatsuri",
-        "Kitsu ID": "14480",
-        "Manga Type": "manga",
         "Ignore": false,
         "Checked Date": null
     },
@@ -1335,16 +1335,6 @@
         "Manga Link": "https://mangadex.org/title/32725/hitomi-chan-is-shy-with-strangers",
         "Title": "Hitomi-chan Is Shy With Strangers",
         "Kitsu ID": "54404",
-        "Manga Type": "manga",
-        "Ignore": false,
-        "Checked Date": null
-    },
-    {
-        "Host": "z13mangadex",
-        "Status": "current",
-        "Manga Link": "https://mangadex.org/title/31058/hokenshitsu-no-otaku-onee-san-wa-suki-desu-ka",
-        "Title": "Hokenshitsu no otaku onee-san wa Suki desu ka?",
-        "Kitsu ID": "54287",
         "Manga Type": "manga",
         "Ignore": false,
         "Checked Date": null
@@ -1387,7 +1377,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -1412,16 +1402,6 @@
     {
         "Host": "z13mangadex",
         "Status": "current",
-        "Manga Link": "https://mangadex.org/title/38739/i-don-t-know-what-my-little-sister-s-friend-is-thinking",
-        "Title": "I don't know what my little sister's friend is thinking!",
-        "Kitsu ID": null,
-        "Manga Type": null,
-        "Ignore": false,
-        "Checked Date": "2020-07-19"
-    },
-    {
-        "Host": "z13mangadex",
-        "Status": "current",
         "Manga Link": "https://mangadex.org/title/48036/i-don-t-know-what-my-little-sister-s-friend-is-thinking",
         "Title": "I Don't Know What My Little Sister's Friend Is Thinking!",
         "Kitsu ID": "55127",
@@ -1438,6 +1418,16 @@
         "Manga Type": "manhwa",
         "Ignore": false,
         "Checked Date": null
+    },
+    {
+        "Host": "z13mangadex",
+        "Status": "current",
+        "Manga Link": "https://mangadex.org/title/48944/i-love-you-miki",
+        "Title": "I Love You, Miki!",
+        "Kitsu ID": null,
+        "Manga Type": null,
+        "Ignore": false,
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -1542,16 +1532,6 @@
     {
         "Host": "z13mangadex",
         "Status": "current",
-        "Manga Link": "https://mangadex.org/title/31209/iji-san-chi-wa-sunao-ni-narenai",
-        "Title": "Iji-san Chi wa Sunao ni Narenai",
-        "Kitsu ID": "52648",
-        "Manga Type": "novel",
-        "Ignore": false,
-        "Checked Date": null
-    },
-    {
-        "Host": "z13mangadex",
-        "Status": "current",
         "Manga Link": "https://mangadex.org/title/22631/ijiranaide-nagatoro-san",
         "Title": "Ijiranaide, Nagatoro-san",
         "Kitsu ID": "40324",
@@ -1587,7 +1567,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -1647,7 +1627,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -1747,7 +1727,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z03mangahere",
@@ -1887,7 +1867,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -1917,7 +1897,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z03mangahere",
@@ -1937,7 +1917,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -1967,7 +1947,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -1990,16 +1970,6 @@
         "Checked Date": null
     },
     {
-        "Host": "z09mangatown",
-        "Status": "current",
-        "Manga Link": "http://m.mangatown.com/manga/kimi_no_iru_machi",
-        "Title": "Kimi no Iru Machi",
-        "Kitsu ID": "17209",
-        "Manga Type": "manga",
-        "Ignore": false,
-        "Checked Date": null
-    },
-    {
         "Host": "z13mangadex",
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/37498/kimi-wa-houkago-insomnia",
@@ -2017,7 +1987,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -2397,7 +2367,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z06kissmanga",
@@ -2418,16 +2388,6 @@
         "Manga Type": "manga",
         "Ignore": false,
         "Checked Date": null
-    },
-    {
-        "Host": "z13mangadex",
-        "Status": "current",
-        "Manga Link": "https://mangadex.org/title/49154/miki-san-sukidesu",
-        "Title": "Miki-san, Sukidesu!",
-        "Kitsu ID": null,
-        "Manga Type": null,
-        "Ignore": false,
-        "Checked Date": "2020-07-16"
     },
     {
         "Host": "z13mangadex",
@@ -2487,7 +2447,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -2527,15 +2487,15 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/15602/my-boyfriend",
         "Title": "My Boyfriend",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "39246",
+        "Manga Type": "manga",
         "Ignore": false,
         "Checked Date": "2020-07-16"
     },
@@ -2552,12 +2512,12 @@
     {
         "Host": "z13mangadex",
         "Status": "current",
-        "Manga Link": "https://mangadex.org/title/46061/my-childhood-friend-s-body-language-is-too-intense",
-        "Title": "My Childhood Friend's Body Language is Too Intense!",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Manga Link": "https://mangadex.org/title/48573/my-classmate-tanaka-san-is-super-scary",
+        "Title": "My Classmate Tanaka-san Is Super Scary",
+        "Kitsu ID": "55491",
+        "Manga Type": "manga",
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": null
     },
     {
         "Host": "z13mangadex",
@@ -2617,15 +2577,15 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/48996/my-roommate-isn-t-from-this-world",
         "Title": "My Roommate Isn't From This World",
-        "Kitsu ID": null,
-        "Manga Type": null,
+        "Kitsu ID": "56830",
+        "Manga Type": "manga",
         "Ignore": false,
         "Checked Date": "2020-07-16"
     },
@@ -2637,7 +2597,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -2647,7 +2607,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -2687,7 +2647,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -2727,7 +2687,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -2737,7 +2697,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -2767,7 +2727,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -2775,16 +2735,6 @@
         "Manga Link": "https://mangadex.org/title/34639/oji-san-to-marshmallow",
         "Title": "Oji-san to Marshmallow",
         "Kitsu ID": "36082",
-        "Manga Type": "manga",
-        "Ignore": false,
-        "Checked Date": null
-    },
-    {
-        "Host": "z13mangadex",
-        "Status": "current",
-        "Manga Link": "https://mangadex.org/title/23284/ojiichan-shinanai",
-        "Title": "Ojiichan Shinanai",
-        "Kitsu ID": "40631",
         "Manga Type": "manga",
         "Ignore": false,
         "Checked Date": null
@@ -3047,7 +2997,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -3087,7 +3037,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -3097,7 +3047,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -3185,16 +3135,6 @@
         "Manga Link": "https://mangadex.org/title/45779/repeat-a-year-todome-senpai",
         "Title": "Repeat A Year! Todome-Senpai",
         "Kitsu ID": "56581",
-        "Manga Type": "manga",
-        "Ignore": false,
-        "Checked Date": null
-    },
-    {
-        "Host": "z13mangadex",
-        "Status": "current",
-        "Manga Link": "https://mangadex.org/title/50588/result-of-marrying-the-demon-bride",
-        "Title": "Result of Marrying The Demon Bride",
-        "Kitsu ID": "54433",
         "Manga Type": "manga",
         "Ignore": false,
         "Checked Date": null
@@ -3307,7 +3247,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -3372,6 +3312,16 @@
     {
         "Host": "z13mangadex",
         "Status": "current",
+        "Manga Link": "https://mangadex.org/title/48689/send-my-regards-to-kenshiro",
+        "Title": "Send My Regards to Kenshiro",
+        "Kitsu ID": "56539",
+        "Manga Type": "manga",
+        "Ignore": false,
+        "Checked Date": null
+    },
+    {
+        "Host": "z13mangadex",
+        "Status": "current",
         "Manga Link": "https://mangadex.org/title/23825/senpai-ga-uzai-kouhai-no-hanashi",
         "Title": "Senpai ga Uzai Kouhai no Hanashi",
         "Kitsu ID": "40885",
@@ -3422,12 +3372,22 @@
     {
         "Host": "z13mangadex",
         "Status": "current",
-        "Manga Link": "https://mangadex.org/title/35987/shark-girl",
+        "Manga Link": "https://mangadex.org/title/36934/shark-girl",
         "Title": "Shark Girl",
         "Kitsu ID": "54560",
         "Manga Type": "manga",
         "Ignore": false,
         "Checked Date": null
+    },
+    {
+        "Host": "z13mangadex",
+        "Status": "current",
+        "Manga Link": "https://mangadex.org/title/35987/shark-girl-webcomic",
+        "Title": "Shark Girl (Webcomic)",
+        "Kitsu ID": null,
+        "Manga Type": null,
+        "Ignore": false,
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -3487,7 +3447,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -3537,23 +3497,13 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
         "Status": "current",
         "Manga Link": "https://mangadex.org/title/22880/smash-it-girl",
         "Title": "Smash it Girl!",
-        "Kitsu ID": null,
-        "Manga Type": null,
-        "Ignore": false,
-        "Checked Date": "2020-07-16"
-    },
-    {
-        "Host": "z13mangadex",
-        "Status": "current",
-        "Manga Link": "https://mangadex.org/title/37167/sokuochi-mayuri-chan",
-        "Title": "Sokuochi Mayuri-chan",
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
@@ -3887,7 +3837,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -3897,7 +3847,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "mangareader",
@@ -3947,7 +3897,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": true,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -3967,7 +3917,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z09mangatown",
@@ -4007,7 +3957,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -4037,7 +3987,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": true,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -4105,7 +4055,7 @@
         "Manga Link": "https://mangadex.org/title/33487/tonari-no-idol-san",
         "Title": "Tonari no Idol-san",
         "Kitsu ID": null,
-        "Manga Type": null,
+        "Manga Type": "Web Comic",
         "Ignore": false,
         "Checked Date": "2020-07-19"
     },
@@ -4187,7 +4137,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z01mangaeden",
@@ -4207,7 +4157,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z09mangatown",
@@ -4285,6 +4235,16 @@
         "Manga Link": "https://mangadex.org/title/32912/welcome-to-japan-elf-san",
         "Title": "Welcome to Japan, Elf-san!",
         "Kitsu ID": "54506",
+        "Manga Type": "manga",
+        "Ignore": false,
+        "Checked Date": null
+    },
+    {
+        "Host": "z13mangadex",
+        "Status": "current",
+        "Manga Link": "https://mangadex.org/title/32452/what-i-get-for-marrying-a-demon-bride",
+        "Title": "What I Get for Marrying a Demon Bride",
+        "Kitsu ID": "54433",
         "Manga Type": "manga",
         "Ignore": false,
         "Checked Date": null
@@ -4377,7 +4337,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": true,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -4407,7 +4367,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -4422,12 +4382,22 @@
     {
         "Host": "z13mangadex",
         "Status": "current",
+        "Manga Link": "https://mangadex.org/title/45821/yome-no-manimani",
+        "Title": "Yome no Manimani",
+        "Kitsu ID": null,
+        "Manga Type": null,
+        "Ignore": false,
+        "Checked Date": "2020-07-19"
+    },
+    {
+        "Host": "z13mangadex",
+        "Status": "current",
         "Manga Link": "https://mangadex.org/title/32813/yomitai-hon-wa-nai-keredo",
         "Title": "Yomitai Hon wa Nai Keredo",
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -4447,7 +4417,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -4472,22 +4442,12 @@
     {
         "Host": "z13mangadex",
         "Status": "current",
-        "Manga Link": "https://mangadex.org/title/21871/yuki-to-sumi",
-        "Title": "Yuki to Sumi",
-        "Kitsu ID": "39812",
-        "Manga Type": "manga",
-        "Ignore": false,
-        "Checked Date": null
-    },
-    {
-        "Host": "z13mangadex",
-        "Status": "current",
         "Manga Link": "https://mangadex.org/title/30821/yukimoto-syuji-s-pixiv-manga",
         "Title": "Yukimoto Syuji's Pixiv Manga",
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": true,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -4577,7 +4537,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -4587,7 +4547,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -4602,22 +4562,12 @@
     {
         "Host": "z13mangadex",
         "Status": "completed",
-        "Manga Link": "https://mangadex.org/title/35354/a-story-about-being-confessed-by-a-cool-girl",
-        "Title": "A Story About Being Confessed by a Cool Girl.",
-        "Kitsu ID": null,
-        "Manga Type": null,
-        "Ignore": false,
-        "Checked Date": "2020-07-16"
-    },
-    {
-        "Host": "z13mangadex",
-        "Status": "completed",
         "Manga Link": "https://mangadex.org/title/37153/a-story-about-confessing-before-the-end-of-the-world",
         "Title": "A Story about Confessing Before the End of the World",
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -4627,7 +4577,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -5257,7 +5207,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -5307,7 +5257,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -5328,16 +5278,6 @@
         "Manga Type": "manga",
         "Ignore": false,
         "Checked Date": null
-    },
-    {
-        "Host": "z13mangadex",
-        "Status": "completed",
-        "Manga Link": "https://mangadex.org/title/47265/confession-is-a-confirmation-of-love",
-        "Title": "Confession is a Confirmation of Love",
-        "Kitsu ID": null,
-        "Manga Type": null,
-        "Ignore": false,
-        "Checked Date": "2020-07-16"
     },
     {
         "Host": "z09mangatown",
@@ -5597,7 +5537,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -5837,7 +5777,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z03mangahere",
@@ -5857,7 +5797,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z03mangahere",
@@ -6097,7 +6037,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -6190,6 +6130,16 @@
         "Checked Date": null
     },
     {
+        "Host": "z13mangadex",
+        "Status": "completed",
+        "Manga Link": "https://mangadex.org/title/20686/hero-waltz-2-0",
+        "Title": "Hero Waltz 2.0",
+        "Kitsu ID": "38160",
+        "Manga Type": "manhwa",
+        "Ignore": false,
+        "Checked Date": null
+    },
+    {
         "Host": "z03mangahere",
         "Status": "completed",
         "Manga Link": "http://www.mangahere.cc/manga/hibi_chouchou/?f=mobile",
@@ -6255,6 +6205,16 @@
         "Manga Link": "https://mangadex.org/title/8761/himouto-umaru-chan",
         "Title": "Himouto! Umaru-chan",
         "Kitsu ID": "7720",
+        "Manga Type": "manga",
+        "Ignore": false,
+        "Checked Date": null
+    },
+    {
+        "Host": "z13mangadex",
+        "Status": "completed",
+        "Manga Link": "https://mangadex.org/title/7950/hinamatsuri",
+        "Title": "Hinamatsuri",
+        "Kitsu ID": "14480",
         "Manga Type": "manga",
         "Ignore": false,
         "Checked Date": null
@@ -6335,6 +6295,16 @@
         "Manga Link": "http://www.mangahere.cc/manga/hiyokoi/?f=mobile",
         "Title": "Hiyokoi",
         "Kitsu ID": "4656",
+        "Manga Type": "manga",
+        "Ignore": false,
+        "Checked Date": null
+    },
+    {
+        "Host": "z13mangadex",
+        "Status": "completed",
+        "Manga Link": "https://mangadex.org/title/31058/hokenshitsu-no-otaku-onee-san-wa-suki-desu-ka",
+        "Title": "Hokenshitsu no otaku onee-san wa Suki desu ka?",
+        "Kitsu ID": "54287",
         "Manga Type": "manga",
         "Ignore": false,
         "Checked Date": null
@@ -6452,6 +6422,16 @@
     {
         "Host": "z13mangadex",
         "Status": "completed",
+        "Manga Link": "https://mangadex.org/title/38739/i-don-t-know-what-my-little-sister-s-friend-is-thinking",
+        "Title": "I don't know what my little sister's friend is thinking!",
+        "Kitsu ID": null,
+        "Manga Type": "Web Comic",
+        "Ignore": false,
+        "Checked Date": "2020-07-19"
+    },
+    {
+        "Host": "z13mangadex",
+        "Status": "completed",
         "Manga Link": "https://mangadex.org/title/18123/i-love-yu",
         "Title": "I Love Yu!",
         "Kitsu ID": "42668",
@@ -6476,6 +6456,16 @@
         "Title": "Ie no Naka no S na Koto",
         "Kitsu ID": "22712",
         "Manga Type": "manga",
+        "Ignore": false,
+        "Checked Date": null
+    },
+    {
+        "Host": "z13mangadex",
+        "Status": "completed",
+        "Manga Link": "https://mangadex.org/title/31209/iji-san-chi-wa-sunao-ni-narenai",
+        "Title": "Iji-san Chi wa Sunao ni Narenai",
+        "Kitsu ID": "52648",
+        "Manga Type": "novel",
         "Ignore": false,
         "Checked Date": null
     },
@@ -6598,6 +6588,16 @@
         "Manga Type": "manga",
         "Ignore": false,
         "Checked Date": null
+    },
+    {
+        "Host": "z13mangadex",
+        "Status": "completed",
+        "Manga Link": "https://mangadex.org/title/51414/jitsu-wa-ryouomoi-kamo-shirenai-onee-san-to-chuusan-danshi-no-hanashi",
+        "Title": "Jitsu wa Ryouomoi Kamo Shirenai Onee-san to Chuusan Danshi no Hanashi",
+        "Kitsu ID": null,
+        "Manga Type": null,
+        "Ignore": false,
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z03mangahere",
@@ -6900,9 +6900,9 @@
         "Checked Date": null
     },
     {
-        "Host": "z03mangahere",
+        "Host": "z09mangatown",
         "Status": "completed",
-        "Manga Link": "http://www.mangahere.cc/manga/kimi_no_iru_machi/?f=mobile",
+        "Manga Link": "http://m.mangatown.com/manga/kimi_no_iru_machi",
         "Title": "Kimi no Iru Machi",
         "Kitsu ID": "17209",
         "Manga Type": "manga",
@@ -7007,7 +7007,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z03mangahere",
@@ -7150,6 +7150,16 @@
         "Checked Date": null
     },
     {
+        "Host": "z13mangadex",
+        "Status": "completed",
+        "Manga Link": "https://mangadex.org/title/35716/konna-joshi-wo-gyutte-shitai-short-stories",
+        "Title": "Konna Joshi wo Gyutte Shitai! Short Stories",
+        "Kitsu ID": null,
+        "Manga Type": null,
+        "Ignore": false,
+        "Checked Date": "2020-07-19"
+    },
+    {
         "Host": "z03mangahere",
         "Status": "completed",
         "Manga Link": "http://www.mangahere.cc/manga/kono_kanojo_wa_fiction_desu/?f=mobile",
@@ -7237,7 +7247,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z03mangahere",
@@ -7357,7 +7367,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z03mangahere",
@@ -7607,7 +7617,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -7617,7 +7627,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -7637,7 +7647,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -7677,7 +7687,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z03mangahere",
@@ -7707,7 +7717,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -7757,7 +7767,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -7767,7 +7777,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -7777,7 +7787,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -7817,7 +7827,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z03mangahere",
@@ -8027,7 +8037,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z03mangahere",
@@ -8036,6 +8046,16 @@
         "Title": "Oh! Lord Jesus",
         "Kitsu ID": "39288",
         "Manga Type": "manhwa",
+        "Ignore": false,
+        "Checked Date": null
+    },
+    {
+        "Host": "z13mangadex",
+        "Status": "completed",
+        "Manga Link": "https://mangadex.org/title/23284/ojiichan-shinanai",
+        "Title": "Ojiichan Shinanai",
+        "Kitsu ID": "40631",
+        "Manga Type": "manga",
         "Ignore": false,
         "Checked Date": null
     },
@@ -8068,16 +8088,6 @@
         "Manga Type": "manga",
         "Ignore": false,
         "Checked Date": null
-    },
-    {
-        "Host": "z13mangadex",
-        "Status": "completed",
-        "Manga Link": "https://mangadex.org/title/32394/omaejan",
-        "Title": "Omaejan",
-        "Kitsu ID": null,
-        "Manga Type": null,
-        "Ignore": false,
-        "Checked Date": "2020-07-16"
     },
     {
         "Host": "z13mangadex",
@@ -8127,7 +8137,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -8427,7 +8437,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -8437,7 +8447,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "mangafox",
@@ -8487,7 +8497,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z03mangahere",
@@ -9070,6 +9080,16 @@
         "Checked Date": null
     },
     {
+        "Host": "z13mangadex",
+        "Status": "completed",
+        "Manga Link": "https://mangadex.org/title/37167/sokuochi-mayuri-chan",
+        "Title": "Sokuochi Mayuri-chan",
+        "Kitsu ID": null,
+        "Manga Type": "Web Comic",
+        "Ignore": false,
+        "Checked Date": "2020-07-19"
+    },
+    {
         "Host": "z03mangahere",
         "Status": "completed",
         "Manga Link": "http://www.mangahere.cc/manga/solanin/?f=mobile",
@@ -9157,7 +9177,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z03mangahere",
@@ -9377,7 +9397,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z03mangahere",
@@ -9407,7 +9427,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -9417,7 +9437,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -9447,7 +9467,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z03mangahere",
@@ -9457,7 +9477,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -9497,7 +9517,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z03mangahere",
@@ -9617,7 +9637,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -9757,7 +9777,7 @@
         "Kitsu ID": null,
         "Manga Type": null,
         "Ignore": false,
-        "Checked Date": "2020-07-16"
+        "Checked Date": "2020-07-19"
     },
     {
         "Host": "z13mangadex",
@@ -9882,16 +9902,6 @@
     {
         "Host": "z13mangadex",
         "Status": "completed",
-        "Manga Link": "https://mangadex.org/title/38533/weekends-the-two-of-us-are-sexfriends",
-        "Title": "Weekends, The Two of Us are Sexfriends.",
-        "Kitsu ID": null,
-        "Manga Type": null,
-        "Ignore": false,
-        "Checked Date": "2020-07-16"
-    },
-    {
-        "Host": "z13mangadex",
-        "Status": "completed",
         "Manga Link": "https://mangadex.org/title/159/welcome-to-the-nhk",
         "Title": "Welcome to the NHK",
         "Kitsu ID": "1048",
@@ -9981,7 +9991,7 @@
     },
     {
         "Host": "z09mangatown",
-        "Status": "completed",
+        "Status": "current",
         "Manga Link": "http://m.mangatown.com/manga/yotsubato/",
         "Title": "Yotsubato!",
         "Kitsu ID": "272",
@@ -10015,6 +10025,16 @@
         "Manga Link": "https://mangadex.org/title/12088/yugami-kun-ni-wa-tomodachi-ga-inai",
         "Title": "Yugami-kun ni wa Tomodachi ga Inai",
         "Kitsu ID": "25695",
+        "Manga Type": "manga",
+        "Ignore": false,
+        "Checked Date": null
+    },
+    {
+        "Host": "z13mangadex",
+        "Status": "completed",
+        "Manga Link": "https://mangadex.org/title/21871/yuki-to-sumi",
+        "Title": "Yuki to Sumi",
+        "Kitsu ID": "39812",
         "Manga Type": "manga",
         "Ignore": false,
         "Checked Date": null
@@ -10135,16 +10155,6 @@
         "Manga Link": "http://www.mangahere.cc/manga/gintama/?f=mobile",
         "Title": "Gintama",
         "Kitsu ID": "116",
-        "Manga Type": "manga",
-        "Ignore": false,
-        "Checked Date": null
-    },
-    {
-        "Host": "z03mangahere",
-        "Status": "on_hold",
-        "Manga Link": "http://www.mangahere.cc/manga/jojo_dead_man_s_questions/?f=mobile",
-        "Title": "JoJo - Dead Man's Questions",
-        "Kitsu ID": "3625",
         "Manga Type": "manga",
         "Ignore": false,
         "Checked Date": null
@@ -10325,6 +10335,16 @@
         "Manga Link": "https://mangadex.org/title/28163/uchi-no-hentai-maid-ni-osowareteru",
         "Title": "Uchi no Hentai Maid ni Osowareteru",
         "Kitsu ID": "41019",
+        "Manga Type": "manga",
+        "Ignore": false,
+        "Checked Date": null
+    },
+    {
+        "Host": "z13mangadex",
+        "Status": "on_hold",
+        "Manga Link": "https://mangadex.org/title/18016/under-execution-under-jailbreak",
+        "Title": "Under Execution, Under Jailbreak",
+        "Kitsu ID": "7930",
         "Manga Type": "manga",
         "Ignore": false,
         "Checked Date": null

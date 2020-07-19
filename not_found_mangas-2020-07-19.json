@@ -340,5 +340,35 @@
         "ID": "22223",
         "Manga Type": "manga",
         "Ignore": true
+    },
+    {
+        "Title": "Maoyuu Maou Yuusha",
+        "ID": "21760",
+        "Manga Type": "manga",
+        "Ignore": true
+    },
+    {
+        "Title": "Watashi no Tomodachi ga Motenai no wa Dou Kangaetemo Omaera ga Warui.",
+        "ID": "6211",
+        "Manga Type": "manga",
+        "Ignore": true
+    },
+    {
+        "Title": "Beelzebub Maou Gaiden",
+        "ID": "14982",
+        "Manga Type": "manga",
+        "Ignore": true
+    },
+    {
+        "Title": "I Don't Have Many Friends +",
+        "ID": "19223",
+        "Manga Type": "manga",
+        "Ignore": true
+    },
+    {
+        "Title": "Tale of Fairy Tail: Ice Trail",
+        "ID": "25450",
+        "Manga Type": "manga",
+        "Ignore": true
     }
 ]
