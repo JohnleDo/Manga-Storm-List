@@ -3,9 +3,7 @@
 # TODO: Have better naming scheme
 # TODO: Use list comphrension for for loops
 # TODO: Added a new field called check date, go through code and fix print statements to include this new field
-# TODO: Make use of the check date field in the manga No ID searching interface, it will be used for easier
-#  identification of series that have been already searched.
-# TODO: Deal with mangas with duplicate IDs like Hero Waltz and Hero Waltz 2.0. Both are listed under the same Kitsu ID
+# TODO: Add error checking
 import pandas as pd
 import re
 import json
@@ -16,6 +14,7 @@ import os
 import logging
 import getpass
 
+
 class MangaListExtractor:
     def __init__(self, filename):
         """
@@ -23,6 +22,7 @@ class MangaListExtractor:
         Functionality: If its a .msbf file it will read all the lines and store it as a list of lines. As for .json file
         it will read it as a list of dicts. This json file should be formatted with keys such as title, Kitsu ID, host,
         manga link, and ignore.
+        :return: None
         """
         if filename.endswith(".msbf"):
             pd.set_option('display.max_rows', None)
@@ -37,7 +37,10 @@ class MangaListExtractor:
 
     def get_manga_hosts(self):
         """
-        Functionality: Will go through each line and parse for the host name while cutting it out and storing it into our dict list
+        :param: None
+        Functionality: Will go through each line and parse for the host name while cutting it out and storing it into
+        our dict list
+        :return: None
         """
         mangaHost = ["z13mangadex",
                      "z03mangahere",
@@ -62,9 +65,11 @@ class MangaListExtractor:
 
     def get_manga_statuses(self):
         """
+        :param: None
         Functionality: Will go through each line and parse for the statuses of each of the manga while cutting it out
         and storing it into our list of dicts. This one is a bit different due to it using the REG of the status along
         with the weird numerical values found in those lines to better parse for them without taking part of the title.
+        :return: None
         """
         mangaStatus = ["\tR\t[0-9]+.[0-9]+",
                        "\tY\t[0-9]+.[0-9]+",
@@ -90,8 +95,10 @@ class MangaListExtractor:
 
     def get_manga_links(self):
         """
+        :param: None
         Functionality: Will go through each line and parse for the links of each of the manga while cutting it out and
         storing it into our list of dicts.
+        :return: None
         """
         linkregex = r'http(s)*://([A-Z]|[a-z]|[0-9]|\s|(\.)|/|-|_|\?|=|&)*'
         for index, line in enumerate(self.fileInfo):
@@ -102,16 +109,20 @@ class MangaListExtractor:
 
     def get_manga_titles(self):
         """
+        :param: None
         Functionality: As long as this function is excuted after all the above has then it will go through each line and
         just store the remaining string into our list of dicts.
+        :return: None
         """
         for index, line in enumerate(self.fileInfo):
             self.mangaList[index]["Title"] = re.sub("\t|\n", "", line)
 
     def add_final_fields(self):
         """
+        :param: None
         Functionality: This function is for adding the last fields that don't require any parsing of the original file
         contexts.
+        :return: None
         """
         for manga in self.mangaList:
             manga["Kitsu ID"] = None
@@ -121,8 +132,10 @@ class MangaListExtractor:
 
     def update_with_new_fields(self, new_field):
         """
-
-        :return:
+        :param: new_field: A string to identify a new key to be added to our dict.
+        Funcationality: Will go through our current list of mangas from self.mangaList and add this new key to each of
+        them
+        :return: Nothing
         """
         for manga in self.mangaList:
             if new_field not in manga:
@@ -130,8 +143,10 @@ class MangaListExtractor:
 
     def get_manga_info(self):
         """
+        :param: None
         Functionality: Simple function to excute all the required functions in the right order to get a complete list
         then put into a DataFrame.
+        :return: None
         """
         self.get_manga_hosts()
         self.get_manga_statuses()
@@ -142,20 +157,30 @@ class MangaListExtractor:
 
     def update_df(self):
         """
+        :param: None
         Functionality: Simple function to call for updating the object's dataFrame whenever the user updates the
         mangaList.
+        :return: None
         """
         self.mangaDF = pd.DataFrame(self.mangaList)
 
     def drop_duplicates(self):
         """
+        :param: None
         Functionality: Drops duplicates from both mangaList and mangaDF.
+        :return: None
         """
         self.mangaDF = pd.DataFrame(self.mangaList)
         self.mangaDF.drop_duplicates(keep="first", inplace=True)
         self.mangaList = self.mangaDF.to_dict(orient="records")
 
     def find_duplicate_ids(self):
+        """
+        :param: None
+        Functionality: This function will find any IDs in our dataFrame that is a duplicate. This will be used for
+        identifying issues where mangas with similar names have the same Kitsu ID.
+        :return:
+        """
         potentialIssues = self.mangaDF[self.mangaDF["Kitsu ID"].duplicated(keep=False)]
         potentialIssues = potentialIssues.loc[potentialIssues["Kitsu ID"].isna() == False]
 
@@ -166,6 +191,7 @@ class MangaListExtractor:
         :param filename: This parameter requires the user to give a name for the file to be created/updated
         Functionality: This function is for writing a new json file with all the new opening filepath information as
         well as the old ones.
+        :return: None
         """
         self.drop_duplicates()
         with open(filename, "w") as jsonFile:
@@ -177,6 +203,14 @@ class MangaListExtractor:
 
 class MangaComparer:
     def __init__(self, newMangaList, oldMangaList):
+        """
+        :param newMangaList: This mangaList is a list of dicts containing Manga Information. This is typically the
+        variable mangaList from the MangaListExtractor object.
+        :param oldMangaList: This mangaList is a list of dicts containing Manga Information. This is typically the
+        variable mangaList from the MangaListExtractor object.
+        Functionality: This is to create the object with our new and old mangaList/mangaDF.
+        :return: None
+        """
         self.oldList = oldMangaList.mangaDF
         self.newList = newMangaList.mangaDF
         self.newList = self.newList.merge(self.oldList, how="left", on=["Title"]).drop(["Kitsu ID_x", "Ignore_x",
@@ -194,10 +228,11 @@ class MangaComparer:
         self.newList = self.newList.where(pd.notnull(self.newList), None)
         self.newList["Ignore"].fillna(value=False, inplace=True)
 
-
     def find_differences(self):
         """
-        This function will find the titles that were not found in the old list from the new list.
+        :param: None
+        Functionality: This function will find the titles that were not found in the old list from the new list.
+        :return: None
         """
         rows_to_be_dropped = []
         for newList_index, newList_row in self.newList.iterrows():
@@ -211,13 +246,15 @@ class MangaComparer:
 class Kitsu:
     def __init__(self, username, password):
         """
-        :param username: Username used for Kitsu to log in.
-        :param password: Password used for Kitsu to log in.
+        :param username: A string that is the Username used for Kitsu to log in.
+        :param password: A string that is the Password used for Kitsu to log in.
         Funcationality: This will log in to the user's Kitsu account and grab all the necessary information to be used
-        later on like the access token.
+        later on like the access token. As well as intializing all necessary variables for error collecting.
+        :return: None
         """
         self.KitsuMangaList = []
         self.JSONMangaList = Manager().list()
+        self.counter = Manager().list()
         self.url = "https://kitsu.io/api"
         getTokenurl = "/oauth/token?grant_type=password&username=<username>&password=<password>"
         getTokenurl = getTokenurl.replace("<username>", username)
@@ -228,11 +265,12 @@ class Kitsu:
         self.header = {"Authorization": self.token_type + ' ' + self.access_token, "Content-Type": "application/vnd.api+json"}
         self.user_id = requests.get(self.url + "/edge/users?filter[self]=true",
                                     headers=self.header).json()["data"][0]["id"]
-        self.errors = []
-        self.updatedTitles = []
+        self.errors = Manager().list()
+        self.updatedTitles = Manager().list()
 
     def get_current_library_entries(self):
         """
+        :param: None
         Functionality: Will get all the current manga the user has stored on their Kitsu Account.
         1. filter[kind]=manga - This specify what library we want to look at it be anime or manga.
         2. filter[user_id]= user_id - This is whoses library to look at.
@@ -243,6 +281,7 @@ class Kitsu:
            statuses.
         6.  page[limit]=500 - By default it will only show 10 mangas per page so changing it to 500 to get the max
             amount per page to speed up the time we're navigating through pages collecting all the manga infomation.
+        :return: None
         """
         mangas = requests.get(self.url + "/edge/library-entries?filter[kind]=manga&filter[user_id]="
                               + self.user_id + "&fields[libraryEntries]=id" + "&include=manga"
@@ -264,22 +303,25 @@ class Kitsu:
     def manga_search(self, title):
         """
         :param title: The title of the manga series.
-        :return: A list of dicts with a bunch of potential results matching that manga series.
         Functionality: Uses the manga title to retrieve information regarding that manga but this will result in a list
         of potential titles that match it.
+        :return: A list of dicts with a bunch of potential results matching that manga series.
         """
         result = requests.get("https://kitsu.io/api/edge/manga?filter[text]=" + title.replace(" ", "+")).json()
         return result
 
     def get_manga_id(self, index, manga):
         """
-        :param index: Current index of manga within our list to keep track of the order of the manga within list to be
-        used later.
+        :param index: Index is an int variable that is used within our list to keep track of the order of the manga
+        within list to be used later. When passing index make sure it corresponds with the index number of the manga
+        that was passed in. It won't mess anything up but its more of a reference thing for the programmer to see
+        what title went wrong.
         :param manga: This is a dict that contains information of our manga from the file it was retrieved from.
         Functionality: Goes through all the potential results the Kitsu website gives us after looking it up and doing
         its best to match it with the exact result.
+        :return: None
         """
-        if manga["Kitsu ID"] is None:
+        if (manga["Kitsu ID"] is None) and (manga["Ignore"] is False):
             result = self.manga_search(manga["Title"].replace("%", "%25"))
             logging.debug("Manga Currently being proceed: " + manga["Title"])
 
@@ -306,7 +348,7 @@ class Kitsu:
                                             logging.debug("Index: " + str(index) + " " + manga["Title"] + " ID: " + result["data"][0]["id"])
                                             self.JSONMangaList.append({"Index": index, "Title": manga["Title"],
                                                                        "Kitsu ID": result["data"][0]["id"],
-                                                                        "Manga Type": result["data"][0]["attributes"]["mangaType"]})
+                                                                       "Manga Type": result["data"][0]["attributes"]["mangaType"]})
                                             matched = True
 
                             if matched is False:
@@ -337,30 +379,47 @@ class Kitsu:
         :param mangaList: Takes a list of dicts of manga. This should typically be from the MangaExtractor.mangaList
         Functionality: This will use the multiprocessing based on however many cores the user has. It will take the
         mangaList is recieved and split it up among the processes and retrieve all the information it can get.
+        :return: None
         """
         with Pool(os.cpu_count()) as p:
             p.starmap(self.get_manga_id, enumerate(mangaList))
-        print("\n")
+        print("Manga's Finished Processing: {}".format(len(self.JSONMangaList)))
 
     def update_list(self, mangaList):
         """
         :param mangaList: Takes a list of dicts of manga. This should typically be from the MangaExtractor.mangaList
         :return: Returns that same list back for the user to manipulate later.
         Funcationality: Goes through the list of manga it recieved and updates it with the list of manga ids we got.
+        :return mangaList: A list of dicts containing manga information that the user passed in that is now updated with
+        new infomration.
+        :return updatedManga: A list of dicts containing manga information of mangas that got updated.
         """
-        counter = 0
+        updatedManga = []
         for manga in self.JSONMangaList:
             if ((manga["Kitsu ID"] is not None) and (mangaList[manga["Index"]]["Title"] == manga["Title"]) and
                (mangaList[manga["Index"]]["Kitsu ID"] is None)):
                 mangaList[manga["Index"]]["Kitsu ID"] = manga["Kitsu ID"]
                 mangaList[manga["Index"]]["Manga Type"] = manga["Manga Type"]
                 logging.debug("Updated {}, Index: {}".format(manga["Title"], manga["Index"]))
-                counter = counter + 1
-        print("Number of Manga IDs Updated: " + str(counter))
+                updatedManga.append(mangaList[manga["Index"]])
+        print("Number of Manga IDs Updated: {}".format(len(updatedManga)))
 
-        return mangaList
+        return mangaList, updatedManga
 
     def find_dropped_manga(self, mangaList, referencefile):
+        """
+        :param mangaList: A list of dicts containing manga information. This is typically the variable mangaList from
+        the MangaExtractorUpdate object,
+        :param referencefile: A list of dicts containing manga information of dropped series. This is an optional
+        parameter. This is used to cross reference any previous not_found_mangas*.json file that was created from this
+        function. It will merge the two.
+        Functionality: This function will pull all the mangas from the user's Kitsu profile that was not found in the
+        user's json file they passed in. This will in turn give a list of potential mangas that should be considered as
+        dropped by the user. It is advise to go through the list of not_found_mangas and make sure the information is
+        correct before calling the drop_update_kitsu_library to update user's Kitsu library with dropped series.
+        :return: A list of dicts containing mangas that were not found in the list of mangas the user provided but was
+        found on the user's Kitsu account.
+        """
         self.get_current_library_entries()
         not_found_mangas = []
         for index, kitsu_manga in enumerate(self.KitsuMangaList):
@@ -397,9 +456,7 @@ class Kitsu:
         print("Number of not found manga from Kitsu in list: {}".format(len(not_found_mangas)))
         return not_found_mangas
 
-    # TODO: Implement multiprocessing
-    # TODO: Add a counter in the print statement
-    def update_kitsu_library(self, mangaList):
+    def update_kitsu_library_entry(self, index, manga):
         post_data = {
             'data': {
                 'type': 'library-entries',
@@ -432,17 +489,40 @@ class Kitsu:
             }
         }
 
-        for counter, manga in enumerate(mangaList):
-            if manga["Kitsu ID"] is not None:
-                geturl = "https://kitsu.io/api/edge/library-entries?filter[user_id]={}&filter[manga_id]={}" \
-                         "".format(self.user_id, manga["Kitsu ID"])
-                jsonInfo = requests.get(geturl, headers=self.header).json()
+        self.counter.append("1")
+        if manga["Kitsu ID"] is not None:
+            geturl = "https://kitsu.io/api/edge/library-entries?filter[user_id]={}&filter[manga_id]={}" \
+                     "".format(self.user_id, manga["Kitsu ID"])
+            jsonInfo = requests.get(geturl, headers=self.header).json()
 
-                if not jsonInfo["data"]:
-                    posturl = "https://kitsu.io/api/edge/library-entries"
-                    post_data["data"]["attributes"]["status"] = manga["Status"]
-                    post_data["data"]["relationships"]["manga"]["data"]["id"] = manga["Kitsu ID"]
-                    response = requests.post(posturl, json=post_data, headers=self.header)
+            if not jsonInfo["data"]:
+                posturl = "https://kitsu.io/api/edge/library-entries"
+                post_data["data"]["attributes"]["status"] = manga["Status"]
+                post_data["data"]["relationships"]["manga"]["data"]["id"] = manga["Kitsu ID"]
+                response = requests.post(posturl, json=post_data, headers=self.header)
+                statusCode = response.status_code
+
+                if 200 <= statusCode < 300:
+                    logging.debug("{} was updated on Kitsu. Status Code: {}".format(manga["Title"], statusCode))
+                    self.updatedTitles.append({"Manga Title": manga["Title"],
+                                               "Kitsu ID": manga["Kitsu ID"],
+                                               "Status": manga["Status"],
+                                               "Type": "POST",
+                                               "Status Code": response.status_code,
+                                               "Response": response})
+                else:
+                    logging.debug("{} was not updated. Error code: {}".format(manga["Title"], statusCode))
+                    self.errors.append({"Manga Title": manga["Title"],
+                                        "Kitsu ID": manga["Kitsu ID"],
+                                        "Status Code": response.status_code,
+                                        "Response": response})
+            else:
+                if jsonInfo["data"][0]["attributes"]["status"] != manga["Status"]:
+                    libray_entry_id = jsonInfo["data"][0]["id"]
+                    patchurl = "https://kitsu.io/api/edge/library-entries/{}".format(libray_entry_id)
+                    patch_data["data"]["id"] = libray_entry_id
+                    patch_data["data"]["attributes"]["status"] = manga["Status"]
+                    response = requests.patch(patchurl, json=patch_data, headers=self.header)
                     statusCode = response.status_code
 
                     if 200 <= statusCode < 300:
@@ -450,7 +530,7 @@ class Kitsu:
                         self.updatedTitles.append({"Manga Title": manga["Title"],
                                                    "Kitsu ID": manga["Kitsu ID"],
                                                    "Status": manga["Status"],
-                                                   "Type": "POST",
+                                                   "Type": "PATCH",
                                                    "Status Code": response.status_code,
                                                    "Response": response})
                     else:
@@ -460,38 +540,20 @@ class Kitsu:
                                             "Status Code": response.status_code,
                                             "Response": response})
                 else:
-                    if jsonInfo["data"][0]["attributes"]["status"] != manga["Status"]:
-                        libray_entry_id = jsonInfo["data"][0]["id"]
-                        patchurl = "https://kitsu.io/api/edge/library-entries/{}".format(libray_entry_id)
-                        patch_data["data"]["id"] = libray_entry_id
-                        patch_data["data"]["attributes"]["status"] = manga["Status"]
-                        response = requests.patch(patchurl, json=patch_data, headers=self.header)
-                        statusCode = response.status_code
+                    logging.debug("{} was not updated. No new status update".format(manga["Title"]))
+        else:
+            logging.debug("{} was not updated. No Kitsu ID".format(manga["Title"]))
 
-                        if 200 <= statusCode < 300:
-                            logging.debug("{} was updated on Kitsu. Status Code: {}".format(manga["Title"], statusCode))
-                            self.updatedTitles.append({"Manga Title": manga["Title"],
-                                                       "Kitsu ID": manga["Kitsu ID"],
-                                                       "Status": manga["Status"],
-                                                       "Type": "PATCH",
-                                                       "Status Code": response.status_code,
-                                                       "Response": response})
-                        else:
-                            logging.debug("{} was not updated. Error code: {}".format(manga["Title"], statusCode))
-                            self.errors.append({"Manga Title": manga["Title"],
-                                                "Kitsu ID": manga["Kitsu ID"],
-                                                "Status Code": response.status_code,
-                                                "Response": response})
-                    else:
-                        logging.debug("{} was not updated. No new status update".format(manga["Title"]))
-            else:
-                logging.debug("{} was not updated. No Kitsu ID".format(manga["Title"]))
+        print("Manga's Finished Processing: {}".format(len(self.counter)), end="\r")
 
-            print("Manga's Finished Processing: {}".format(counter), end="\r")
-        print("Manga's Finished Processing: {}".format(counter))
+    def update_kitsu_library(self, mangaList):
+        with Pool(os.cpu_count()) as p:
+            p.starmap(self.update_kitsu_library_entry, enumerate(mangaList))
+        print("Manga's Finished Processing: {}".format(len(self.counter)))
         print("Manga Errors: {}".format(len(self.errors)))
         print("Mangas Updated: {}".format(len(self.updatedTitles)))
-
+        self.counter = Manager().list()
+        print("\n")
 
     # TODO: Have this remove the manga entries from the file that we passed in which is the not_found_mangas* one
     def drop_update_kitsu_library(self, mangaList):
@@ -751,8 +813,24 @@ class MenuOption():
                 jsonmangaList = MangaListExtractor(jsonfile)
                 KitsuUpdater = Kitsu(self.username, self.password)
                 KitsuUpdater.get_manga_ids(jsonmangaList.mangaList)
-                jsonmangaList.mangaList = KitsuUpdater.update_list(jsonmangaList.mangaList)
-                jsonmangaList.write_to_json(jsonfile)
+                jsonmangaList.mangaList, updatedManga = KitsuUpdater.update_list(jsonmangaList.mangaList)
+                jsonmangaList.update_df()
+                updatedManga = pd.DataFrame(updatedManga)
+                self.print_bars()
+                print("Updated Entries")
+                self.print_bars()
+                print(updatedManga[["Title", "Status", "Kitsu ID"]])
+
+                while True:
+                    user_input = input("Would you like to save results? (Y/N): ")
+                    if user_input.lower() == "y" or user_input.lower() == "yes":
+                        jsonmangaList.write_to_json(jsonfile)
+                        break
+                    elif user_input.lower() == "n" or user_input.lower() == "no":
+                        print("{} was not updated.".format(jsonfile))
+                        break
+                    else:
+                        print("Invalid input, please try again.")
                 print("\n")
 
             elif user_input == "4":
@@ -839,9 +917,8 @@ class MenuOption():
                 KitsuUpdater.update_kitsu_library(jsonmangaList.mangaList)
                 self.KitsuErrors = KitsuUpdater.errors
 
-
             elif user_input == "9":
-                print("Exitting...\n")
+                print("Exiting program...\n")
                 break
             else:
                 print("Invalid input\n")
@@ -1093,7 +1170,7 @@ class MenuOption():
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     pd.set_option("display.max_rows", None)
-    newList = MangaListExtractor("mangalist-2020-07-11.json")
+    newList = MangaListExtractor("mangalist-2020-07-19.json")
     oldList = MangaListExtractor("mangalist-2020-06-11.json")
     newListKitsu = Kitsu("Kitsuneace", "Cookie100203")
     oldListKitsu = Kitsu("Kitsuneace", "Cookie100203")
