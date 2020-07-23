@@ -2,7 +2,6 @@
 # TODO: Fix lines where it exceeds the character limit
 # TODO: Have better naming scheme
 # TODO: Use list comphrension for for loops
-# TODO: Added a new field called check date, go through code and fix print statements to include this new field
 # TODO: Add error checking
 import pandas as pd
 import re
@@ -457,6 +456,14 @@ class Kitsu:
         return not_found_mangas
 
     def update_kitsu_library_entry(self, index, manga):
+        """
+        :param index: An int variable. Serves no current purpose due to how the multiprocessing function
+        update_kitsu_library is set up.
+        :param manga: This is a dict that contains information of our manga from the file it was retrieved from.
+        Functionality: Updates Kitsu website with the manga information of its current status based on the Kitsu ID
+        that is set.
+        :return: None
+        """
         post_data = {
             'data': {
                 'type': 'library-entries',
@@ -547,6 +554,12 @@ class Kitsu:
         print("Manga's Finished Processing: {}".format(len(self.counter)), end="\r")
 
     def update_kitsu_library(self, mangaList):
+        """
+        :param mangaList: Takes a list of dicts of manga. This should typically be from the MangaExtractor.mangaList
+        Functionality: Will go through the list of mangas and use multiprocessing to update multiple manga titles at
+        once
+        :return: None
+        """
         with Pool(os.cpu_count()) as p:
             p.starmap(self.update_kitsu_library_entry, enumerate(mangaList))
         print("Manga's Finished Processing: {}".format(len(self.counter)))
@@ -555,8 +568,12 @@ class Kitsu:
         self.counter = Manager().list()
         print("\n")
 
-    # TODO: Have this remove the manga entries from the file that we passed in which is the not_found_mangas* one
     def drop_update_kitsu_library(self, mangaList):
+        """
+        :param mangaList: Takes a list of dicts of manga. This should typically be from json not_found_manga*.json file
+        Functionality: Will go through the list of mangas and update all mangas that need to be dropped.
+        :return: None
+        """
         patch_data = {
             "data": {
                 "type": "libraryEntries",
