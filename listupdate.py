@@ -685,12 +685,12 @@ class MenuOption():
         self.print_bars()
         print("1. Extract manga information from a .msbf file")
         print("2. Update Manga List with another existing Manga List")
-        print("3. Attempt to find and update all manga id in JSON file")
+        print("3. Auto find all Manga IDs")
         print("4. Find dropped series")
-        print("5. Update Manga Information or Search for Manga IDs")
+        print("5. Find Manga IDs")
         print("6. Find issues with manga list")
         print("7. Update Kitsu Website with dropped manga with JSON file")
-        print("8. Update Kitsu Website with JSON File")
+        print("8. Update Kitsu Website with a JSON File")
         print("9. Exit")
         self.print_bars()
 
@@ -714,14 +714,15 @@ class MenuOption():
         print("What would you like to do?\n"
               "1. Update with one of the results from above\n"
               "2. Proceed to next manga in list\n"
-              "3. Search manga with different title\n"
-              "4. Reset current manga back to original settings\n"
-              "5. Mark manga as ignore \n"
-              "6. Go to different index number of manga counter\n"
-              "7. Save all changes\n"
-              "8. Discard all changes \n"
-              "9. Exit back to previous menu option\n"
-              "10. Exit to main menu\n")
+              "3. Go back to previous manga in list\n"
+              "4. Search manga with different title\n"
+              "5. Reset current manga back to original settings\n"
+              "6. Mark manga as ignore \n"
+              "7. Go to different index number of manga counter\n"
+              "8. Save all changes\n"
+              "9. Discard all changes \n"
+              "10. Exit back to previous menu option\n"
+              "11. Exit to main menu\n")
         print("---------------------------------------------------------------------------------------")
 
     def print_manga_info(self, manga):
@@ -1086,10 +1087,20 @@ class MenuOption():
                                 jsonmangaList.mangaList[index]["Checked Date"] = str(datetime.datetime.now().date())
                             break
                         elif user_input == "3":
+                            if mangaCounter == 0:
+                                self.print_bars()
+                                print("You're already at 0, can't go any further back than that")
+                                self.print_bars()
+                            else:
+                                mangaCounter = mangaCounter - 1
+                                if jsonmangaList.mangaList[index]["Kitsu ID"] is None:
+                                    jsonmangaList.mangaList[index]["Checked Date"] = str(datetime.datetime.now().date())
+                                break
+                        elif user_input == "4":
                             new_title = input("Enter a different title to search for: ")
                             title_search = True
                             break
-                        elif user_input == "4":
+                        elif user_input == "5":
                             updated = False
                             jsonmangaList.mangaList[index]["Kitsu ID"] = None
                             jsonmangaList.mangaList[index]["Manga Type"] = None
@@ -1098,13 +1109,13 @@ class MenuOption():
 
                             self.print_manga_info(jsonmangaList.mangaList[index])
                             self.print_bars()
-                        elif user_input == "5":
+                        elif user_input == "6":
                             jsonmangaList.mangaList[index]["Ignore"] = True
                             self.print_bars()
                             print("Manga Updated to be ignored")
                             self.print_manga_info(jsonmangaList.mangaList[index])
                             self.print_bars()
-                        elif user_input == "6":
+                        elif user_input == "7":
                             while True:
                                 index_input = input("What index number do you want to jump to?: ")
                                 if index_input.isnumeric():
@@ -1118,44 +1129,35 @@ class MenuOption():
                                 else:
                                     print("Input you entered was not an integer, please try again.")
                             break
-                        elif user_input == "7":
+                        elif user_input == "8":
                             self.print_bars()
                             jsonmangaList.write_to_json(jsonfile)
                             self.print_bars()
-                        elif user_input == "8":
+                        elif user_input == "9":
                             self.print_bars()
                             jsonmangaListBackUp.write_to_json(jsonfile)
                             self.print_bars()
-                        elif user_input == "9" or user_input == "10":
-                            if user_input == "9":
-                                go_to_previous_menu = True
-                            elif user_input == "10":
-                                go_to_main_menu = True
-                            else:
-                                # TODO: Add a way to go back to main menu
-                                print("Needs to be added")
-                            user_input = input("Would you like to save any unsaved changes? (Y/N): ")
-                            if user_input.lower() == "y" or user_input.lower() == "yes":
-                                jsonmangaList.write_to_json(jsonfile)
-                                print("Unsaved changes were saved")
-                                self.print_bars()
-                            else:
-                                self.print_bars()
-                                print("Unsaved changes were not saved")
-                                self.print_bars()
+                        elif user_input == "10":
+                            go_to_previous_menu = True
+                            break
+                        elif user_input == "11":
+                            go_to_main_menu = True
                             break
                         else:
                             self.print_bars()
                             print("Invalid input")
                             self.print_bars()
 
-                    print("You went through the whole list of mangas with no ID.")
-                    user_input = input("Would you like to save any unsaved changes? (Y/N): ")
-                    if user_input.lower() == "y" or user_input.lower() == "yes":
-                        jsonmangaList.write_to_json(jsonfile)
-                        self.print_bars()
-                        print("Unsaved changes were saved")
-                        self.print_bars()
+                user_input = input("Would you like to save any unsaved changes? (Y/N): ")
+                if user_input.lower() == "y" or user_input.lower() == "yes":
+                    jsonmangaList.write_to_json(jsonfile)
+                    self.print_bars()
+                    print("Unsaved changes were saved")
+                    self.print_bars()
+                else:
+                    self.print_bars()
+                    print("Unsaved changes were not saved")
+                    self.print_bars()
             elif user_input == "4":
                 if problemType == "Missing IDs":
                     jsonmangaList.update_df()
