@@ -17,10 +17,10 @@ import getpass
 class MangaListExtractor:
     def __init__(self, filename):
         """
-        :param filename: Must pass a file. The two options are a .json or .msbf file.
         Functionality: If its a .msbf file it will read all the lines and store it as a list of lines. As for .json file
         it will read it as a list of dicts. This json file should be formatted with keys such as title, Kitsu ID, host,
         manga link, and ignore.
+        :param filename: Must pass a file. The two options are a .json or .msbf file.
         :return: None
         """
         if filename.endswith(".msbf"):
@@ -36,9 +36,9 @@ class MangaListExtractor:
 
     def get_manga_hosts(self):
         """
-        :param: None
         Functionality: Will go through each line and parse for the host name while cutting it out and storing it into
         our dict list
+        :param: None
         :return: None
         """
         mangaHost = ["z13mangadex",
@@ -64,10 +64,10 @@ class MangaListExtractor:
 
     def get_manga_statuses(self):
         """
-        :param: None
         Functionality: Will go through each line and parse for the statuses of each of the manga while cutting it out
         and storing it into our list of dicts. This one is a bit different due to it using the REG of the status along
         with the weird numerical values found in those lines to better parse for them without taking part of the title.
+        :param: None
         :return: None
         """
         mangaStatus = ["\tR\t[0-9]+.[0-9]+",
@@ -94,9 +94,9 @@ class MangaListExtractor:
 
     def get_manga_links(self):
         """
-        :param: None
         Functionality: Will go through each line and parse for the links of each of the manga while cutting it out and
         storing it into our list of dicts.
+        :param: None
         :return: None
         """
         linkregex = r'http(s)*://([A-Z]|[a-z]|[0-9]|\s|(\.)|/|-|_|\?|=|&)*'
@@ -108,9 +108,9 @@ class MangaListExtractor:
 
     def get_manga_titles(self):
         """
-        :param: None
         Functionality: As long as this function is excuted after all the above has then it will go through each line and
         just store the remaining string into our list of dicts.
+        :param: None
         :return: None
         """
         for index, line in enumerate(self.fileInfo):
@@ -118,9 +118,9 @@ class MangaListExtractor:
 
     def add_final_fields(self):
         """
-        :param: None
         Functionality: This function is for adding the last fields that don't require any parsing of the original file
         contexts.
+        :param: None
         :return: None
         """
         for manga in self.mangaList:
@@ -131,9 +131,9 @@ class MangaListExtractor:
 
     def update_with_new_fields(self, new_field):
         """
-        :param: new_field: A string to identify a new key to be added to our dict.
         Funcationality: Will go through our current list of mangas from self.mangaList and add this new key to each of
         them
+        :param: new_field: A string to identify a new key to be added to our dict.
         :return: Nothing
         """
         for manga in self.mangaList:
@@ -142,9 +142,9 @@ class MangaListExtractor:
 
     def get_manga_info(self):
         """
-        :param: None
         Functionality: Simple function to excute all the required functions in the right order to get a complete list
         then put into a DataFrame.
+        :param: None
         :return: None
         """
         self.get_manga_hosts()
@@ -156,17 +156,17 @@ class MangaListExtractor:
 
     def update_df(self):
         """
-        :param: None
         Functionality: Simple function to call for updating the object's dataFrame whenever the user updates the
         mangaList.
+        :param: None
         :return: None
         """
         self.mangaDF = pd.DataFrame(self.mangaList)
 
     def drop_duplicates(self):
         """
-        :param: None
         Functionality: Drops duplicates from both mangaList and mangaDF.
+        :param: None
         :return: None
         """
         self.mangaDF = pd.DataFrame(self.mangaList)
@@ -175,9 +175,9 @@ class MangaListExtractor:
 
     def find_duplicate_ids(self):
         """
-        :param: None
         Functionality: This function will find any IDs in our dataFrame that is a duplicate. This will be used for
         identifying issues where mangas with similar names have the same Kitsu ID.
+        :param: None
         :return:
         """
         potentialIssues = self.mangaDF[self.mangaDF["Kitsu ID"].duplicated(keep=False)]
@@ -187,9 +187,9 @@ class MangaListExtractor:
 
     def write_to_json(self, filename):
         """
-        :param filename: This parameter requires the user to give a name for the file to be created/updated
         Functionality: This function is for writing a new json file with all the new opening filepath information as
         well as the old ones.
+        :param filename: This parameter requires the user to give a name for the file to be created/updated
         :return: None
         """
         self.drop_duplicates()
@@ -203,11 +203,11 @@ class MangaListExtractor:
 class MangaComparer:
     def __init__(self, newMangaList, oldMangaList):
         """
+        Functionality: This is to create the object with our new and old mangaList/mangaDF.
         :param newMangaList: This mangaList is a list of dicts containing Manga Information. This is typically the
         variable mangaList from the MangaListExtractor object.
         :param oldMangaList: This mangaList is a list of dicts containing Manga Information. This is typically the
         variable mangaList from the MangaListExtractor object.
-        Functionality: This is to create the object with our new and old mangaList/mangaDF.
         :return: None
         """
         self.oldList = oldMangaList.mangaDF
@@ -229,8 +229,8 @@ class MangaComparer:
 
     def find_differences(self):
         """
-        :param: None
         Functionality: This function will find the titles that were not found in the old list from the new list.
+        :param: None
         :return: None
         """
         rows_to_be_dropped = []
@@ -245,10 +245,10 @@ class MangaComparer:
 class Kitsu:
     def __init__(self, username, password):
         """
-        :param username: A string that is the Username used for Kitsu to log in.
-        :param password: A string that is the Password used for Kitsu to log in.
         Funcationality: This will log in to the user's Kitsu account and grab all the necessary information to be used
         later on like the access token. As well as intializing all necessary variables for error collecting.
+        :param username: A string that is the Username used for Kitsu to log in.
+        :param password: A string that is the Password used for Kitsu to log in.
         :return: None
         """
         self.KitsuMangaList = []
@@ -269,7 +269,6 @@ class Kitsu:
 
     def get_current_library_entries(self):
         """
-        :param: None
         Functionality: Will get all the current manga the user has stored on their Kitsu Account.
         1. filter[kind]=manga - This specify what library we want to look at it be anime or manga.
         2. filter[user_id]= user_id - This is whoses library to look at.
@@ -280,6 +279,7 @@ class Kitsu:
            statuses.
         6.  page[limit]=500 - By default it will only show 10 mangas per page so changing it to 500 to get the max
             amount per page to speed up the time we're navigating through pages collecting all the manga infomation.
+        :param: None
         :return: None
         """
         mangas = requests.get(self.url + "/edge/library-entries?filter[kind]=manga&filter[user_id]="
@@ -301,9 +301,9 @@ class Kitsu:
 
     def manga_search(self, title):
         """
-        :param title: The title of the manga series.
         Functionality: Uses the manga title to retrieve information regarding that manga but this will result in a list
         of potential titles that match it.
+        :param title: The title of the manga series.
         :return: A list of dicts with a bunch of potential results matching that manga series.
         """
         result = requests.get("https://kitsu.io/api/edge/manga?filter[text]=" + title.replace(" ", "+")).json()
@@ -311,13 +311,13 @@ class Kitsu:
 
     def get_manga_id(self, index, manga):
         """
+        Functionality: Goes through all the potential results the Kitsu website gives us after looking it up and doing
+        its best to match it with the exact result.
         :param index: Index is an int variable that is used within our list to keep track of the order of the manga
         within list to be used later. When passing index make sure it corresponds with the index number of the manga
         that was passed in. It won't mess anything up but its more of a reference thing for the programmer to see
         what title went wrong.
         :param manga: This is a dict that contains information of our manga from the file it was retrieved from.
-        Functionality: Goes through all the potential results the Kitsu website gives us after looking it up and doing
-        its best to match it with the exact result.
         :return: None
         """
         if (manga["Kitsu ID"] is None) and (manga["Ignore"] is False):
@@ -375,9 +375,9 @@ class Kitsu:
 
     def get_manga_ids(self, mangaList):
         """
-        :param mangaList: Takes a list of dicts of manga. This should typically be from the MangaExtractor.mangaList
         Functionality: This will use the multiprocessing based on however many cores the user has. It will take the
         mangaList is recieved and split it up among the processes and retrieve all the information it can get.
+        :param mangaList: Takes a list of dicts of manga. This should typically be from the MangaExtractor.mangaList
         :return: None
         """
         with Pool(os.cpu_count()) as p:
@@ -386,9 +386,9 @@ class Kitsu:
 
     def update_list(self, mangaList):
         """
+        Funcationality: Goes through the list of manga it recieved and updates it with the list of manga ids we got.
         :param mangaList: Takes a list of dicts of manga. This should typically be from the MangaExtractor.mangaList
         :return: Returns that same list back for the user to manipulate later.
-        Funcationality: Goes through the list of manga it recieved and updates it with the list of manga ids we got.
         :return mangaList: A list of dicts containing manga information that the user passed in that is now updated with
         new infomration.
         :return updatedManga: A list of dicts containing manga information of mangas that got updated.
@@ -407,15 +407,15 @@ class Kitsu:
 
     def find_dropped_manga(self, mangaList, referencefile):
         """
+        Functionality: This function will pull all the mangas from the user's Kitsu profile that was not found in the
+        user's json file they passed in. This will in turn give a list of potential mangas that should be considered as
+        dropped by the user. It is advise to go through the list of not_found_mangas and make sure the information is
+        correct before calling the drop_update_kitsu_library to update user's Kitsu library with dropped series.
         :param mangaList: A list of dicts containing manga information. This is typically the variable mangaList from
         the MangaExtractorUpdate object,
         :param referencefile: A list of dicts containing manga information of dropped series. This is an optional
         parameter. This is used to cross reference any previous not_found_mangas*.json file that was created from this
         function. It will merge the two.
-        Functionality: This function will pull all the mangas from the user's Kitsu profile that was not found in the
-        user's json file they passed in. This will in turn give a list of potential mangas that should be considered as
-        dropped by the user. It is advise to go through the list of not_found_mangas and make sure the information is
-        correct before calling the drop_update_kitsu_library to update user's Kitsu library with dropped series.
         :return: A list of dicts containing mangas that were not found in the list of mangas the user provided but was
         found on the user's Kitsu account.
         """
@@ -457,11 +457,11 @@ class Kitsu:
 
     def update_kitsu_library_entry(self, index, manga):
         """
+        Functionality: Updates Kitsu website with the manga information of its current status based on the Kitsu ID
+        that is set.
         :param index: An int variable. Serves no current purpose due to how the multiprocessing function
         update_kitsu_library is set up.
         :param manga: This is a dict that contains information of our manga from the file it was retrieved from.
-        Functionality: Updates Kitsu website with the manga information of its current status based on the Kitsu ID
-        that is set.
         :return: None
         """
         post_data = {
@@ -555,9 +555,9 @@ class Kitsu:
 
     def update_kitsu_library(self, mangaList):
         """
-        :param mangaList: Takes a list of dicts of manga. This should typically be from the MangaExtractor.mangaList
         Functionality: Will go through the list of mangas and use multiprocessing to update multiple manga titles at
         once
+        :param mangaList: Takes a list of dicts of manga. This should typically be from the MangaExtractor.mangaList
         :return: None
         """
         with Pool(os.cpu_count()) as p:
@@ -570,8 +570,8 @@ class Kitsu:
 
     def drop_update_kitsu_library(self, mangaList):
         """
-        :param mangaList: Takes a list of dicts of manga. This should typically be from json not_found_manga*.json file
         Functionality: Will go through the list of mangas and update all mangas that need to be dropped.
+        :param mangaList: Takes a list of dicts of manga. This should typically be from json not_found_manga*.json file
         :return: None
         """
         patch_data = {
@@ -614,9 +614,10 @@ class Kitsu:
 
     def write_to_json(self, filename, mangaList):
         """
+        Functionality: This function is for creating/updating a JSON files with a list of dicts that was passed in.
         :param filename: This parameter requires the user to give a name for the file to be created/updated
         :param mangaList: This parameter requires the user to give a list of manga titles to append to our JSON file
-        Functionality: This function is for creating/updating a JSON files with a list of dicts that was passed in.
+        :return: None
         """
         with open(filename, "w") as jsonFile:
             jsonFile.seek(0)
@@ -624,31 +625,24 @@ class Kitsu:
             jsonFile.truncate()
             print(filename + " has been updated/created.")
 
-    def test_request_put(self, url, data):
-        self.test = requests.put(url, json=data, headers=self.header)
-
-    def test_request_patch(self, url, data):
-        self.test = requests.patch(url, json=data, headers=self.header)
-
-    def test_request_get(self, url):
-        self.test = requests.get(url, headers=self.header)
-
-    def test_request_post(self, url, data):
-        self.test = requests.post(url, json=data, headers=self.header)
-
 
 class MenuOption():
     def __init__(self):
+        """
+        Functionality: Initializes the object username and password.
+        :param: None
+        :return: None
+        """
         self.username = None
         self.password = None
         self.KitsuErrors = []
 
     def check_input(self, listofitems, user_input):
         """
+        Functionality: It will determine if the user entered an index or an actual string and return accordingly.
         :param listofitems: A list containing whatever the user if want to retrieve something from.
         :param user_input: The string of a user's input.
         :return: An item from the list that was provided based on index or just the string itself.
-        Functionality: It will determine if the user entered an index or an actual string and return accordingly.
         """
         if user_input.isnumeric():
             return listofitems[int(user_input)]
@@ -656,6 +650,11 @@ class MenuOption():
             return user_input
 
     def print_logo(self):
+        """
+        Functionality: Simple function for printing the logo.
+        :param: None
+        :return: None
+        """
         os.system("cls" if os.name == "nt" else "clear")
         print("""
         ********************************************************************************************************************
@@ -678,9 +677,19 @@ class MenuOption():
          """)
 
     def print_bars(self):
+        """
+        Functionality: Prints a bar for terminal formatting.
+        :param: None
+        :return: None
+        """
         print("=======================================================================================================")
 
     def print_options_one(self):
+        """
+        Functionality: Prints the first set of menu options.
+        :param: None
+        :return: None
+        """
         print("List Of Options")
         self.print_bars()
         print("1. Extract manga information from a .msbf file")
@@ -695,6 +704,13 @@ class MenuOption():
         self.print_bars()
 
     def print_options_two(self, problemType):
+        """
+        Functionality: Prints the second set of menu options. This set of menu is for deciding what to do with the
+        passed in problem type.
+        :param problemType: This is a string identifying what kind of problem type the user wants to use the menu for.
+        So far there's only two option which is Missing IDs and Duplicate IDs.
+        :return: None
+        """
         print("List Of Options")
         self.print_bars()
         print("1. Look up manga ID on Kitsu")
@@ -711,6 +727,12 @@ class MenuOption():
         self.print_bars()
 
     def print_options_three(self):
+        """
+        Functionality: Prints the third set of menu options. These are the options for when iterating through mangas and
+        need to make changes.
+        :param: None
+        :return: None
+        """
         print("What would you like to do?\n"
               "1. Update with one of the results from above\n"
               "2. Proceed to next manga in list\n"
@@ -726,6 +748,12 @@ class MenuOption():
         print("---------------------------------------------------------------------------------------")
 
     def print_manga_info(self, manga):
+        """
+        Functionality: This function will print out the current manga's information which include all key values in a
+        pretty formatted statement.
+        :param manga: This is a dict which contains manga information.
+        :return: None
+        """
         self.print_bars()
         print("Host: {}\n"
               "Ignore: {}\n"
@@ -745,6 +773,13 @@ class MenuOption():
         self.print_bars()
 
     def update_manga_field(self, jsonmangaList, filename):
+        """
+        Functionality: This function will update whichever specific dict which is a manga in our list. It will update
+        whichever key value and then save it back to the filename.
+        :param jsonmangaList: A list of dicts where the dicts are manga information.
+        :param filename: A string containing the name of the filename.
+        :return: None
+        """
         mangaInfo = int(input("Please enter index number of manga from list: "))
         mangaFields = ["Host", "Ignore", "Title", "Kitsu ID", "Manga Link", "Manga Type", "Status",
                        "Checked Date"]
@@ -770,6 +805,11 @@ class MenuOption():
         jsonmangaList.write_to_json(filename)
 
     def list_files(self, fileExtension):
+        """
+        Functionality: This function will list all the files found in the directory in alphabetical order.
+        :param fileExtension: A string with the file extension name that we only want to list.
+        :return: None
+        """
         files = []
         print("\n{} files".format(fileExtension))
         self.print_bars()
@@ -784,6 +824,12 @@ class MenuOption():
         return files
 
     def ExecuteMenu(self):
+        """
+        Functionality: This function is where it executes a bunch of different menu options that will walk the user
+        through a bunch of different prompts while doing a bunch of different things according to the menu option.
+        :param: None
+        :return: None
+        """
         self.username = input("Please enter Kitsu username: ")
         self.password = getpass.getpass(prompt="Please enter Kitsu password: ")
         test_login = Kitsu(self.username,
@@ -942,6 +988,17 @@ class MenuOption():
                 print("Invalid input\n")
 
     def ExecuteMenuTwo(self, jsonfile, jsonmangaList, jsonmangaListBackUp, KitsuUpdater, problemIDs, problemType):
+        """
+        Functionality: This function will execute the second set and third set of menu options to update the json file.
+        :param jsonfile: A string with the name of a json file.
+        :param jsonmangaList: A list of dicts where the dicts are manga information.
+        :param jsonmangaListBackUp: A backup list of dicts where the dicts are manga information.
+        :param KitsuUpdater: A Kitsu object.
+        :param problemIDs: A list of dicts where the dicts are manga information. But this list is specific with only
+        mangas that had duplicate IDs found in the jsonmangaList.
+        :param problemType: A string specificing the problem type which could "Missing IDs" or "Duplicate IDs".
+        :return: None
+        """
         searchMode = False
         go_to_main_menu = False
         self.print_bars()
@@ -1189,10 +1246,14 @@ class MenuOption():
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     pd.set_option("display.max_rows", None)
+    """
+    # For Debugging purposes
+    username = "Whatever"
+    password = "Whatever"
     newList = MangaListExtractor("mangalist-2020-07-19.json")
     oldList = MangaListExtractor("mangalist-2020-06-11.json")
-    newListKitsu = Kitsu("Kitsuneace", "Cookie100203")
-    oldListKitsu = Kitsu("Kitsuneace", "Cookie100203")
+    newListKitsu = Kitsu(username, password)
+    oldListKitsu = Kitsu(username, password)
     # newList.update_with_new_fields("Checked Date")
     # newList.update_df()
     # oldList.update_with_new_fields("Checked Date")
@@ -1209,6 +1270,7 @@ if __name__ == '__main__':
     # newList.update_df()
     # oldList.update_df()
 
-    comparer = MangaComparer(newList, oldList)
+    # comparer = MangaComparer(newList, oldList)
     # menu_option()
+    """
 
