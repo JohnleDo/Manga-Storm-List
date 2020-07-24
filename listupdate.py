@@ -1246,6 +1246,8 @@ class MenuOption():
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     pd.set_option("display.max_rows", None)
+    menu = MenuOption()
+    menu.ExecuteMenu()
     """
     # For Debugging purposes
     username = "Whatever"
@@ -1271,6 +1273,5 @@ if __name__ == '__main__':
     # oldList.update_df()
 
     # comparer = MangaComparer(newList, oldList)
-    # menu_option()
     """
 
